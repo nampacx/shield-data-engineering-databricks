@@ -80,6 +80,14 @@ display(spark.table("shield.silver.ping_windows").orderBy("start").limit(10))
 # COMMAND ----------
 
 dbutils.widgets.text("eventhub_namespace", "", "Event Hubs namespace (azd EVENT_HUB_NAMESPACE)")
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC Fill the `eventhub_namespace` box (or leave it empty to skip Part B), then run the cell below to read it.
+
+# COMMAND ----------
+
 ns = dbutils.widgets.get("eventhub_namespace")
 
 # COMMAND ----------

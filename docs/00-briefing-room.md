@@ -40,6 +40,9 @@ sources → ingest → bronze (raw) → silver (clean) → gold (business-ready)
 * **Unity Catalog**: catalogs → schemas → tables/volumes, with permissions and lineage.
 * **Lakeflow**: Jobs (orchestration), Spark Declarative Pipelines (declarative ETL), Connect (ingestion).
 
+## Want the full map?
+Read [Core concepts](core-concepts.md): account vs workspace, Unity Catalog, and serverless vs cluster compute, explained properly.
+
 ## New to notebooks?
 Read [How to run a chapter notebook](how-to-run-notebooks.md) once. Every later chapter relies on it.
 

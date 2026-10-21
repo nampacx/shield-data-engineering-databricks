@@ -14,7 +14,7 @@
 # MAGIC 4. Set **Retries = 2** on each task, add a failure **notification**, add a schedule (start it *paused*).
 # MAGIC 5. **Run now**, then run again: results must be identical (idempotency).
 # MAGIC
-# MAGIC **How to run (by hand first):** connect serverless compute, run the first code cell so the `step` dropdown appears, pick `ingest`, then **Run all**. Repeat with `silver`, then `gold`.
+# MAGIC **How to run (by hand first):** connect serverless compute, run the first code cell so the `step` dropdown appears, pick `ingest`, then run the cells below it (cell menu → **Run All Below**). Repeat with `silver`, then `gold`.
 # MAGIC Afterwards build the job (steps above) so these three runs happen automatically.
 # MAGIC
 # MAGIC **Needs:** chapters 03 to 06 done (bronze incidents, `silver.locations`, quality rules).
@@ -42,6 +42,14 @@ from shield_data.quality import INCIDENT_RULES
 
 dbutils.widgets.dropdown("step", "ingest", ["ingest", "silver", "gold"], "Pipeline step")
 dbutils.widgets.text("deliver_files", "1", "Files to deliver (ingest step only)")
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC Pick the `step` in the dropdown above, then run the cell below to read it. (In a job, the task parameter sets it for you.)
+
+# COMMAND ----------
+
 step = dbutils.widgets.get("step")
 
 STAGING, RAW = Path("/Volumes/shield/landing/staging"), Path("/Volumes/shield/landing/raw")

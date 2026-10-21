@@ -90,7 +90,7 @@ This creates: a Databricks workspace (Premium), ADLS Gen2 storage, an access con
 | 15 | The Avengers Initiative | Serving, dashboards, MLflow | [doc](docs/15-avengers-initiative.md) | [15_avengers_initiative.py](notebooks/databricks/15_avengers_initiative.py) | drafted |
 | 16 | Project Insight | Capstone, runbook | [doc](docs/16-project-insight.md) | [16_project_insight.py](notebooks/databricks/16_project_insight.py) | drafted |
 
-Status values: `planned`, `drafted` (written and checked against Microsoft Learn, **not yet run** in a real workspace), `verified` (run end to end). Nothing is `verified` yet. Extra guides: [how to run a notebook (start here if new)](docs/how-to-run-notebooks.md), [glossary](docs/glossary.md), [troubleshooting](docs/troubleshooting.md), [runbook](docs/runbook.md).
+Status values: `planned`, `drafted` (written and checked against Microsoft Learn, **not yet run** in a real workspace), `verified` (run end to end). Nothing is `verified` yet. Extra guides: [core concepts (account, workspace, Unity Catalog, compute)](docs/core-concepts.md), [how to run a notebook (start here if new)](docs/how-to-run-notebooks.md), [glossary](docs/glossary.md), [troubleshooting](docs/troubleshooting.md), [runbook](docs/runbook.md).
 
 ## Dataset
 

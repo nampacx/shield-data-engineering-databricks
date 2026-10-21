@@ -9,7 +9,7 @@
 # MAGIC **Before running**, create the storage credential `shield_cred` (see `docs/01-assemble-the-platform.md`).
 # MAGIC You need the `CREATE EXTERNAL LOCATION` and `CREATE CATALOG` privileges (metastore admin has both).
 # MAGIC
-# MAGIC **How to run:** connect compute, run the first code cell, fill the `storage_account` box (see below), then **Run all**.
+# MAGIC **How to run:** connect compute, run the first code cell (it creates the boxes), fill the `storage_account` box, then run the rest *from the `assert` cell downward* (cell menu → **Run All Below**). Details below.
 # MAGIC
 # MAGIC **Needs:** `azd up` finished and the storage credential `shield_cred` created (docs, step 4).
 # MAGIC
@@ -20,13 +20,13 @@
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC **Widgets** are input boxes. The code cell below creates two: `storage_account` (you must fill it in) and `credential` (leave `shield_cred`).
-# MAGIC The boxes appear in the widget panel, at the top of the notebook or at this cell.
+# MAGIC **Widgets** are input boxes. The first code cell below only *creates* two of them: `storage_account` (you must fill it in) and `credential` (leave `shield_cred`).
+# MAGIC The boxes appear in the widget panel, at the top of the notebook or at that cell. The cell after it *reads* them. They are separate cells on purpose, so you can fill the box between the two.
 # MAGIC
-# MAGIC 1. Run the code cell below. It stops with `Fill in the storage_account widget`: that is expected, the box is empty.
+# MAGIC 1. Run the first code cell (the one with `dbutils.widgets.text`). The two boxes appear.
 # MAGIC 2. In a terminal run `azd env get-values` and copy the value of `STORAGE_ACCOUNT_NAME` (only the name, no `https://`).
 # MAGIC 3. Paste it into the `storage_account` box and press Enter.
-# MAGIC 4. **Run the code cell again** (the value is read when the cell runs), then continue with the rest.
+# MAGIC 4. Run the next code cell (the one with `assert`). It passes once the box is filled. Then continue downward with **Run All Below** from that cell's run menu. Avoid **Run all** from the top once the box is filled: it re-runs the cell that creates the widgets, and may reset what you typed.
 # MAGIC
 # MAGIC No box visible? **Edit → Add parameter**, name `storage_account`, type *Text*.
 
@@ -34,6 +34,14 @@
 
 dbutils.widgets.text("storage_account", "", "Storage account name (azd output STORAGE_ACCOUNT_NAME)")
 dbutils.widgets.text("credential", "shield_cred", "Storage credential name")
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC **Step 2:** fill the `storage_account` box, then run the cell below. It reads the boxes and stops with `Fill in the storage_account widget` if the name is missing.
+
+# COMMAND ----------
+
 sa = dbutils.widgets.get("storage_account")
 cred = dbutils.widgets.get("credential")
 assert sa, "Fill in the storage_account widget"

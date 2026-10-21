@@ -11,7 +11,7 @@
 **Steps**
 1. Open the notebook and connect serverless compute ([How to run a chapter notebook](how-to-run-notebooks.md), sections 1 to 3).
 2. Run Part A (the first two code cells) with Shift+Enter, or **Run all**. Part A needs nothing else.
-3. For Part B, follow *Setting up Part B* below, then fill the `eventhub_namespace` widget (the cell that creates it must run first so the box appears) and run the rest. With the widget empty, Part B prints `Skipping part B` and does nothing.
+3. For Part B, follow *Setting up Part B* below, run the cell that creates the `eventhub_namespace` widget so the box appears, fill it, then run the cells below it one by one. With the widget empty, Part B prints `Skipping part B` and does nothing.
 
 **What you should see:** Part A: a table of per-minute averages per location. Part B: a second table, `ping_windows_live`, fed from Event Hubs.
 

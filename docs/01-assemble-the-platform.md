@@ -35,10 +35,12 @@ A **widget** is a small input box above the notebook. This notebook has two:
 
 The boxes **do not exist until the first code cell has run**, because that cell creates them. So the very first time:
 
-1. Click into the first code cell (the one starting with `dbutils.widgets.text`) and press **Shift+Enter** to run it. The two boxes appear in the widget panel, at the top of the notebook or at this cell (pin the panel to keep it at the top). The cell may stop with `Fill in the storage_account widget`. That is expected: the box is still empty.
+1. Run the first code cell (the one starting with `dbutils.widgets.text`) with **Shift+Enter**. It only creates the two boxes; they appear in the widget panel, at the top of the notebook or at this cell.
 2. In a terminal in the repo, run `azd env get-values` and copy the value of `STORAGE_ACCOUNT_NAME`. It is a short lowercase name such as `stshielddevabc123`.
 3. Paste **only that name** into the `storage_account` box. No `https://`, no `.dfs.core.windows.net`, no path, no spaces. Press Enter.
-4. Click **Run all** in the toolbar (or run this cell again). The cell must run again after you fill the box, because the value is only read when the cell runs.
+4. Run the **next** code cell (the one with `assert sa`). It reads the box and passes once it is filled. Then continue with that cell's run menu → **Run All Below**. Avoid **Run all** from the top once the box is filled: it re-runs the cell that creates the widgets, and may reset what you typed.
+
+The creating and the reading are two separate cells on purpose: a cell that creates a widget and immediately demands a value would always fail the first time.
 
 Why the name is needed: the notebook builds `abfss://uc-managed@<storage_account>.dfs.core.windows.net/` from it. That path is the external location and the catalog's managed location, i.e. where the `shield` catalog physically keeps its data.
 

@@ -45,10 +45,10 @@ Two habits that save beginners a lot of grief:
 2. **Read the result under each cell** before running the next one. The chapters teach by what you *see* there.
 
 ## 5. Widgets (input boxes)
-Widgets appear in a **widget panel**. Depending on your workspace version and settings, the panel sits under the toolbar at the top of the notebook or right at the cell that created them (inside or just below it). It is the same panel either way. Widgets exist **only after the cell that creates them has run**. So the first time:
+Widgets are created in one cell and read in a *later* cell, so you can fill the box in between. Widgets appear in a **widget panel**. Depending on your workspace version and settings, the panel sits under the toolbar at the top of the notebook or right at the cell that created them (inside or just below it). It is the same panel either way. Widgets exist **only after the cell that creates them has run**. So the first time:
 1. Run the cell that contains `dbutils.widgets...` (Shift+Enter). The boxes appear.
 2. Type or choose a value, press Enter.
-3. Run the rest, or click **Run all**.
+3. Run the cells below the creating cell (cell run menu → **Run All Below**; it includes the cell you are in). Avoid **Run all** from the top once you have filled a box, because it re-runs the cell that creates the widgets and may reset your value.
 
 **No boxes showing?** Work through this list:
 1. **Did the creating cell run successfully?** It needs a green check or a finished state, not an error. Widgets created in a cell that failed before the `dbutils.widgets` line, or a cell you only clicked but did not run, do not exist.

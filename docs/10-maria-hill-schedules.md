@@ -7,7 +7,7 @@
 **Before you start:** chapters 03 to 06 are done (bronze incidents, `silver.locations`, and the quality rules), because the three steps rebuild silver and gold.
 
 **Steps**
-1. Open the notebook and connect serverless compute. First try it **by hand**: run the cell that creates the widgets, use the **Pipeline step** dropdown to pick `ingest`, and run all. Repeat for `silver`, then `gold`. Each run prints `step '...' done`.
+1. Open the notebook and connect serverless compute. First try it **by hand**: run the cell that creates the widgets, use the **Pipeline step** dropdown to pick `ingest`, and run the cells below it (**Run All Below**). Repeat for `silver`, then `gold`. Each run prints `step '...' done`.
 2. Now automate it: **Jobs & Pipelines → Create → Job**, name `shield_daily`, and add three *Notebook* tasks that point to this notebook with the parameter `step=ingest`, `step=silver`, `step=gold`. Set `silver` to depend on `ingest` and `gold` on `silver`.
 3. Set retries to 2, add a failure notification, add a schedule and leave it **paused**, then click **Run now**.
 4. Run the job a second time and compare the tables: they must be identical.

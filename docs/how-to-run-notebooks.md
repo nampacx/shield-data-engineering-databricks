@@ -45,7 +45,7 @@ Two habits that save beginners a lot of grief:
 2. **Read the result under each cell** before running the next one. The chapters teach by what you *see* there.
 
 ## 5. Widgets (input boxes)
-Widgets appear directly under the toolbar, but **only after the cell that creates them has run**. So the first time:
+Widgets appear in a **widget panel**. Depending on your workspace version and settings, the panel sits under the toolbar at the top of the notebook or right at the cell that created them (inside or just below it). It is the same panel either way. Widgets exist **only after the cell that creates them has run**. So the first time:
 1. Run the cell that contains `dbutils.widgets...` (Shift+Enter). The boxes appear.
 2. Type or choose a value, press Enter.
 3. Run the rest, or click **Run all**.
@@ -53,7 +53,7 @@ Widgets appear directly under the toolbar, but **only after the cell that create
 **No boxes showing?** Work through this list:
 1. **Did the creating cell run successfully?** It needs a green check or a finished state, not an error. Widgets created in a cell that failed before the `dbutils.widgets` line, or a cell you only clicked but did not run, do not exist.
 2. **Is compute connected?** Creating widgets in code needs a notebook attached to compute; with nothing attached the cell cannot run.
-3. **Look right under the toolbar**, above the first cell, and scroll the notebook to the very top. Widgets appear in a widget panel there. The panel has a gear icon (settings) and a pin icon; pinning keeps the panel at the top while you scroll, and the setting is saved per user.
+3. **Look for the widget panel**: at the top of the notebook, or at the cell that created the widgets. The panel has a gear icon (settings) and a pin icon; pinning places the widgets at the top of the notebook so they stay in one place, and the setting is saved per user.
 4. **Create the box by hand.** In the notebook menu choose **Edit → Add parameter**, set *Parameter Name* to exactly the name the notebook uses (for chapter 01: `storage_account`), type *Text*, and save. The code reads it with `dbutils.widgets.get`, so a box made this way works just as well.
 
 Widget values reset when the compute session ends; re-run the creating cell and re-enter them. Chapters that use widgets: 01 (`storage_account`), 09 (`eventhub_namespace`), 10 (`step`, `deliver_files`).

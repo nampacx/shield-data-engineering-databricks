@@ -6,6 +6,18 @@
 # MAGIC Everything you built comes together. This notebook is the **health check** you would schedule as the last
 # MAGIC task of `shield_daily`: it raises an error (and so triggers your alert) when the platform looks wrong.
 # MAGIC Read `docs/runbook.md` for what to do when it fails.
+# MAGIC
+# MAGIC **How to run:** connect serverless compute and **Run all**.
+# MAGIC
+# MAGIC **Needs:** all earlier chapters, at least up to chapter 10 (silver, quarantine and a recently written gold table).
+# MAGIC
+# MAGIC **What happens:** four automatic health checks print `PASS` or `FAIL`. If any fails, the last cell **raises an error on purpose**, so a scheduled job shows a failure and sends its alert.
+# MAGIC A red run therefore means "the platform needs attention", which is exactly what this notebook is for. Use `docs/runbook.md` to fix it.
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC `check(name, ok, detail)` prints `PASS` or `FAIL` with a detail line and remembers failures in the list `problems`.
 
 # COMMAND ----------
 
@@ -28,6 +40,11 @@ def check(name: str, ok: bool, detail: str) -> None:
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC **Reconciliation:** compares the number of distinct incidents in bronze with silver plus quarantine. Rows must not vanish between layers (1% tolerance).
+
+# COMMAND ----------
+
 bronze_ids = spark.table("shield.bronze.incident_reports").select("incident_id").distinct().count()
 silver_n = spark.table("shield.silver.incident_reports").count()
 quarantine_ids = spark.table("shield.silver.incident_reports_quarantine").select("incident_id").distinct().count()
@@ -39,12 +56,22 @@ check("reconciliation", silver_n + quarantine_ids >= bronze_ids * 0.99, f"bronze
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC **Quality:** if more than 15% of incidents are quarantined, a feed is probably broken. The generator injects about 5%, so this should pass.
+
+# COMMAND ----------
+
 rate = quarantine_ids / max(bronze_ids, 1)
 check("quarantine_rate", rate < 0.15, f"{rate:.1%} of incidents quarantined (limit 15%)")
 
 # COMMAND ----------
 
 # MAGIC %md ## 3. Freshness: gold was updated recently
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC **Freshness:** reads the table history to see when gold was last written. If it is older than a day, the pipeline did not run. Run chapter 10's job (or notebook) first if this fails.
 
 # COMMAND ----------
 
@@ -58,6 +85,11 @@ check("gold_freshness", age < timedelta(days=1), f"gold last written {age} ago")
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC **Uniqueness:** silver must have exactly one row per `incident_id`.
+
+# COMMAND ----------
+
 dupes = spark.sql("SELECT COUNT(*) FROM (SELECT incident_id FROM shield.silver.incident_reports GROUP BY 1 HAVING COUNT(*) > 1)").first()[0]
 check("silver_unique", dupes == 0, f"{dupes} duplicated incident_ids")
 
@@ -65,6 +97,11 @@ check("silver_unique", dupes == 0, f"{dupes} duplicated incident_ids")
 
 # MAGIC %md ## 5. Cost and operations (system tables)
 # MAGIC Requires a metastore admin to enable the `billing` and `lakeflow` system schemas.
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC **Cost and operations:** DBU usage per day and job outcomes from system tables. These need a metastore admin to enable the `billing` and `lakeflow` schemas, otherwise a message is printed. They do not affect the PASS/FAIL result.
 
 # COMMAND ----------
 
@@ -91,6 +128,11 @@ try:
     )
 except Exception as e:  # noqa: BLE001
     print("System tables unavailable (enable the schemas first):", type(e).__name__)
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC **The alert:** if any check failed, raise an error. In a job, this makes the task fail and triggers the failure notification. If everything is fine, you see `All checks passed.`
 
 # COMMAND ----------
 

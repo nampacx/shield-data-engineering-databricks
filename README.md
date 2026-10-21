@@ -105,3 +105,7 @@ pytest
 ## Contributing
 
 Issues and PRs welcome. See [CLAUDE.md](CLAUDE.md) for conventions.
+
+## Disclaimer
+
+This is an unofficial fan project for learning purposes. It is not affiliated with, endorsed by, or sponsored by Marvel, Disney, Microsoft, or Databricks. Marvel, S.H.I.E.L.D., Avengers, and related names and characters are trademarks of their respective owners. All data in this repo is synthetic.

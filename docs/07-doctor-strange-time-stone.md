@@ -2,6 +2,19 @@
 
 **Notebook:** [07_doctor_strange_time_stone.py](../notebooks/databricks/07_doctor_strange_time_stone.py)
 
+## How to run this chapter
+
+**Before you start:** chapter 06 is done (`shield.silver.incident_reports` exists in its clean form).
+
+**Steps**
+1. Open the notebook and connect serverless compute ([How to run a chapter notebook](how-to-run-notebooks.md), sections 1 to 3).
+2. Run the cells **in order with Shift+Enter**: the notebook tampers with a table and then repairs it, and you want to see each state.
+3. After *Hydra tampers*, look at the severity table, then follow the audit, the change feed, time travel and `RESTORE`.
+
+**What you should see:** no `critical` rows after the tampering, the update visible in `DESCRIBE HISTORY`, row-level `update_preimage` / `update_postimage` rows, the old counts via `VERSION AS OF`, and the original counts back after `RESTORE`.
+
+If a run stops halfway (after the tampering, before `RESTORE`), the table stays tampered. Run the `RESTORE` cell, or re-run chapter 06 to rebuild it.
+
 ## Concepts
 * **History**: `DESCRIBE HISTORY` lists each version with user, operation, and metrics: a free audit log of writes.
 * **Time travel**: `SELECT ... VERSION AS OF n` / `TIMESTAMP AS OF`. Reproduce a report exactly as it was.

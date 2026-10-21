@@ -2,6 +2,20 @@
 
 **Notebook:** [12_hawkeyes_precision.py](../notebooks/databricks/12_hawkeyes_precision.py)
 
+## How to run this chapter
+
+**Before you start:** chapters 02 and 05 are done (`shield.silver.locations` exists). This notebook generates a bigger dataset and takes noticeably longer than the others.
+
+**Steps**
+1. Open the notebook and connect serverless compute ([How to run a chapter notebook](how-to-run-notebooks.md), sections 1 to 3).
+2. Click **Run all** and be patient during the first cell (500,000 incidents are generated once).
+3. Compare the two timings printed under *Same query, two layouts*, then open the **Query Profile** for both queries (query history → a query → *See query profile*) and compare files read and bytes read.
+4. When finished, drop the demo tables (see the last exercise).
+
+**What you should see:** `numFiles` for the plain and the clustered table, two timings, and, in the profile, fewer files read for the clustered table.
+
+Timings in a notebook are noisy. Trust the profile, not the stopwatch. The demo tables live in `shield.ops` and cost storage until you drop them.
+
 ## Concepts
 * **Data skipping**: Delta stores min/max stats per file. If your filter excludes a file's range, the file is never read. Layout decides how well that works.
 * **Liquid clustering** (`CLUSTER BY`) co-locates rows by the columns you filter on, replacing hand-tuned partitioning and Z-ORDER. Keys can change later without rewriting everything at once.

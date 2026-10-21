@@ -24,6 +24,9 @@ Safe to re-run: the generator rewrites the same files (fixed seed 42). Chapter 0
 ## What the notebook does
 Generates 10,000 synthetic incidents with 5% defects into the volume `shield.landing.staging`, reads them, aggregates them, and asks you to find the defects by eye.
 
+## Where the data lives
+The generator writes into the Unity Catalog volume `shield.landing.staging` (path `/Volumes/shield/landing/staging`), backed by the workspace's managed cloud storage. One folder per feed: `incident_reports/` and `sensor_pings/` with `part-0000.json` to `part-0004.json`, and `agents/`, `locations/`, `threat_assessments/` with one CSV each. The notebook prints the listing with file sizes; you can also browse it under **Catalog** → `shield` → `landing` → `staging`.
+
 ## Gotchas
 * `spark.read.json` infers the schema by reading data: fine here, slow and fragile in production (chapter 03 fixes that).
 * Files in volumes are available as ordinary paths (`/Volumes/...`) to Python and to Spark.

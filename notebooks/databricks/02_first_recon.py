@@ -36,6 +36,23 @@ counts
 
 # COMMAND ----------
 
+# MAGIC %md ## Where did the data go?
+# MAGIC The files now live in the **Unity Catalog volume** `shield.landing.staging`, which is backed by cloud storage (ADLS Gen2) managed by Unity Catalog.
+# MAGIC The path `/Volumes/shield/landing/staging` is `/Volumes/<catalog>/<schema>/<volume>`. You can also browse it in **Catalog** (left sidebar) →
+# MAGIC `shield` → `landing` → `staging`. The cell below lists every file with its size. **Expect:** one folder per feed; `incident_reports` and
+# MAGIC `sensor_pings` hold 5 `part-000N.json` files each, the others a single CSV.
+
+# COMMAND ----------
+
+print(f"Data written to: {STAGING}\n")
+for feed in sorted(p for p in STAGING.iterdir() if p.is_dir()):
+    files = sorted(f for f in feed.iterdir() if f.is_file())
+    print(f"{feed.name}/  ({len(files)} file(s))")
+    for f in files:
+        print(f"    {f.name:<28}{f.stat().st_size / 1024:>10,.1f} KB")
+
+# COMMAND ----------
+
 # MAGIC %md ## A DataFrame is a lazy plan
 # MAGIC Nothing below reads data until an **action** (`display`, `count`, `write`) runs.
 

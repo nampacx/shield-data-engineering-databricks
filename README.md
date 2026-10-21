@@ -56,6 +56,18 @@ flowchart LR
 - Azure CLI, Azure Developer CLI (`azd`), Python 3.11+
 - Databricks CLI (needed from chapter 13)
 
+## Region
+
+The default is `swedencentral`; `germanywestcentral` also works (set `AZURE_LOCATION`). Both support Databricks serverless compute. Sweden Central is the default because it has system tables (used in the capstone) and a lower Databricks DBU price. Check [feature availability by region](https://learn.microsoft.com/azure/databricks/resources/feature-region-support) before picking another region.
+
+```bash
+azd env new shielddev
+azd env set AZURE_LOCATION swedencentral
+azd up
+```
+
+This creates: a Databricks workspace (Premium), ADLS Gen2 storage, an access connector for Unity Catalog, Key Vault, and an Event Hubs namespace (Standard, for chapter 09). Unity Catalog's regional metastore is created automatically with the workspace; the catalog and external location are created in chapter 01.
+
 ## Chapters
 
 | # | Chapter | Topic | Status |

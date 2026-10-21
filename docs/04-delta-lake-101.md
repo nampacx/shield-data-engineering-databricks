@@ -2,6 +2,19 @@
 
 **Notebook:** [04_delta_lake_101.py](../notebooks/databricks/04_delta_lake_101.py)
 
+## How to run this chapter
+
+**Before you start:** chapter 03 is done (`shield.bronze.agents` exists).
+
+**Steps**
+1. Open the notebook and connect serverless compute ([How to run a chapter notebook](how-to-run-notebooks.md), sections 1 to 3).
+2. Click **Run all**, or step through with Shift+Enter to watch each table change.
+3. In *Many small writes*, compare `numFiles` before and after `OPTIMIZE`.
+
+**What you should see:** a line `Rejected: ...` for the bad write, the new `last_seen` column, the two merged agents (`A0001` updated, `A9001` inserted), a history table with one row per operation, and the file count dropping from 15 to 1.
+
+Safe to re-run: the first cell uses `CREATE OR REPLACE TABLE`, which resets `silver.agents` (and keeps its history).
+
 ## Concepts
 * **Delta = Parquet files + a transaction log** (`_delta_log`). Each commit adds a version. That gives you **ACID** transactions, **time travel** (chapter 07), and **concurrent-safe** writes.
 * **Schema enforcement**: appends that do not match the table are rejected. **Schema evolution** is explicit (`ALTER TABLE ADD COLUMNS`, or `mergeSchema`).

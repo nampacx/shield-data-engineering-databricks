@@ -5,6 +5,13 @@
 # MAGIC
 # MAGIC Build silver and gold from the bronze tables of chapter 03. This is a simple full-refresh version;
 # MAGIC chapters 06 and 08 make it safer and incremental.
+# MAGIC
+# MAGIC **How to run:** connect serverless compute, then **Run all**.
+# MAGIC
+# MAGIC **Needs:** chapter 03 done (`shield.bronze.incident_reports` and `shield.bronze.locations`).
+# MAGIC
+# MAGIC **What happens:** bronze becomes **silver** (one clean row per incident) and then **gold** (aggregates answering business questions).
+# MAGIC This version has no quality gate yet, so bad values leak into gold: you will see that at the end. Safe to re-run: all writes are full overwrites.
 
 # COMMAND ----------
 
@@ -14,6 +21,13 @@ from pyspark.sql import functions as F
 # COMMAND ----------
 
 # MAGIC %md ## Silver: typed, deduplicated incidents (no quality gate yet)
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC Two steps. 1) `try_to_timestamp` converts the text `reported_at` into a real timestamp, giving NULL instead of an error for garbage.
+# MAGIC 2) A **window function** numbers the rows of each `incident_id` from newest to oldest by `_ingested_at`; we keep row 1 only. That removes duplicates (the latest copy wins).
+# MAGIC The result is written to `shield.silver.incident_reports`. **Expect:** a count lower than the bronze row count.
 
 # COMMAND ----------
 
@@ -35,6 +49,11 @@ print(spark.table("shield.silver.incident_reports").count())
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC Locations need no cleaning here, so we just select the columns we want and save them as a silver table.
+
+# COMMAND ----------
+
 (
     spark.table("shield.bronze.locations")
     .select("location_id", "city", "country", "lat", "lon")
@@ -44,6 +63,12 @@ print(spark.table("shield.silver.incident_reports").count())
 # COMMAND ----------
 
 # MAGIC %md ## Gold: business-ready aggregates
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC **Gold table 1:** incidents and casualties per day, city, type and severity. It joins incidents with locations (`USING (location_id)`) and groups by all non-aggregated columns (`GROUP BY ALL`).
+# MAGIC Named after the question it answers: "what is the daily threat picture?". **Expect:** 10 recent rows.
 
 # COMMAND ----------
 
@@ -72,6 +97,11 @@ display(spark.sql("SELECT * FROM shield.gold.daily_threat_briefing ORDER BY repo
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC **Gold table 2:** per city, how many incidents, how many were `high` or `critical`, and the average casualties. **Expect:** cities ranked by serious incidents.
+
+# COMMAND ----------
+
 spark.sql(
     """
     CREATE OR REPLACE TABLE shield.gold.location_risk AS
@@ -92,6 +122,11 @@ display(spark.table("shield.gold.location_risk").orderBy(F.desc("serious_inciden
 # MAGIC %md
 # MAGIC Notice what is **wrong** with this silver table: invalid severities, future timestamps and negative casualties
 # MAGIC flowed straight through, and they are now in the gold numbers. That is chapter 06.
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC **Look closely.** Valid severities are `low`, `medium`, `high`, `critical`. Anything else (like `catastrophic`) got through to silver and into the gold numbers. Chapter 06 adds the gate that stops this.
 
 # COMMAND ----------
 

@@ -5,6 +5,19 @@
 # MAGIC
 # MAGIC You will generate the seed data into a volume and explore it with DataFrames and SQL.
 # MAGIC Run on **serverless** compute (notebook compute dropdown) to keep things simple.
+# MAGIC
+# MAGIC **How to run:** connect serverless compute, then **Run all**.
+# MAGIC
+# MAGIC **Needs:** chapter 01 done (the volume `shield.landing.staging` must exist).
+# MAGIC
+# MAGIC **What happens:** a generator in `src/shield_data` writes synthetic S.H.I.E.L.D. data (incident reports with 5% deliberate defects, agents,
+# MAGIC locations, sensor pings) as files into the volume. You then read the files and explore them. Safe to re-run: the fixed seed rewrites the same files.
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC `generate(...)` is our own helper (imported from the repo). It writes files to the volume `staging`, split into 5 batches per feed so they can
+# MAGIC "arrive one at a time" in chapter 03. **Expect:** a dictionary with the number of rows per feed.
 
 # COMMAND ----------
 
@@ -23,8 +36,31 @@ counts
 
 # COMMAND ----------
 
+# MAGIC %md ## Where did the data go?
+# MAGIC The files now live in the **Unity Catalog volume** `shield.landing.staging`, which is backed by cloud storage (ADLS Gen2) managed by Unity Catalog.
+# MAGIC The path `/Volumes/shield/landing/staging` is `/Volumes/<catalog>/<schema>/<volume>`. You can also browse it in **Catalog** (left sidebar) →
+# MAGIC `shield` → `landing` → `staging`. The cell below lists every file with its size. **Expect:** one folder per feed; `incident_reports` and
+# MAGIC `sensor_pings` hold 5 `part-000N.json` files each, the others a single CSV.
+
+# COMMAND ----------
+
+print(f"Data written to: {STAGING}\n")
+for feed in sorted(p for p in STAGING.iterdir() if p.is_dir()):
+    files = sorted(f for f in feed.iterdir() if f.is_file())
+    print(f"{feed.name}/  ({len(files)} file(s))")
+    for f in files:
+        print(f"    {f.name:<28}{f.stat().st_size / 1024:>10,.1f} KB")
+
+# COMMAND ----------
+
 # MAGIC %md ## A DataFrame is a lazy plan
 # MAGIC Nothing below reads data until an **action** (`display`, `count`, `write`) runs.
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC `spark.read.json(folder)` reads all JSON files in the folder into one DataFrame. Spark guesses the column types by reading the data
+# MAGIC (*schema inference*): fine here, slow and fragile for real data. `printSchema()` shows the result. **Expect:** a list of columns such as `incident_id`, `severity`, `reported_at`.
 
 # COMMAND ----------
 
@@ -35,11 +71,22 @@ incidents.printSchema()
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC A first look at 10 rows. `limit` keeps it cheap. Nothing was really read until this line: a DataFrame is a *plan*, and `display` is an *action* that runs it.
+
+# COMMAND ----------
+
 display(incidents.limit(10))
 
 # COMMAND ----------
 
 # MAGIC %md ## Transformations
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC `groupBy` + `agg` counts incidents and sums casualties per type and severity. `orderBy(desc("n"))` puts the biggest groups first.
+# MAGIC These are *transformations* (lazy). `display` triggers the work. Grouping moves data between machines (a *shuffle*), which is where time goes in Spark.
 
 # COMMAND ----------
 
@@ -53,6 +100,12 @@ display(by_type)
 # COMMAND ----------
 
 # MAGIC %md ## The same thing in SQL
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC The same question in SQL. A **temp view** gives a DataFrame a table name that exists only in this notebook session.
+# MAGIC **Expect:** exactly the same numbers as above. DataFrame code and SQL are the same engine; pick whichever reads better.
 
 # COMMAND ----------
 
@@ -72,6 +125,12 @@ display(
 
 # MAGIC %md ## Spot the mess
 # MAGIC The generator injected defects. Find them before the quality chapters do.
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC Three quick checks for the defects the generator injected: missing `agent_id`, invalid `severity` values, and duplicate `incident_id`s.
+# MAGIC Write down what you find; chapters 05 and 06 deal with each.
 
 # COMMAND ----------
 

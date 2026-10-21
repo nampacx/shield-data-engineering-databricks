@@ -2,6 +2,19 @@
 
 **Notebook:** [05_medallion.py](../notebooks/databricks/05_medallion.py)
 
+## How to run this chapter
+
+**Before you start:** chapter 03 is done (`bronze.incident_reports` and `bronze.locations` exist).
+
+**Steps**
+1. Open the notebook and connect serverless compute ([How to run a chapter notebook](how-to-run-notebooks.md), sections 1 to 3).
+2. Click **Run all**.
+3. At the end, read the severity table: the bad values you see are the point of the chapter.
+
+**What you should see:** silver tables `incident_reports` and `locations`, gold tables `daily_threat_briefing` and `location_risk`, and a severity count that contains invalid values.
+
+Safe to re-run: every write is a full overwrite. Chapter 06 will replace `silver.incident_reports` with a cleaner version.
+
 ## The layers
 | Layer | Contains | Rule of thumb |
 |---|---|---|

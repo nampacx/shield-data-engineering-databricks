@@ -6,11 +6,23 @@
 # MAGIC Two consumers: **dashboards** (Databricks SQL) and a **model** (MLflow). The data is random, so the model will
 # MAGIC be useless. That is the point: the plumbing is what you are learning, and a pipeline that reports "AUC ≈ 0.5"
 # MAGIC honestly is a good pipeline.
+# MAGIC
+# MAGIC **How to run:** connect serverless compute and **Run all**. The dashboard part is done in the UI afterwards.
+# MAGIC
+# MAGIC **Needs:** chapters 05 and 06 done (gold tables and the clean `silver.incident_reports`).
+# MAGIC
+# MAGIC **What happens:** gold data gets two consumers. 1) Three SQL queries to paste into a Databricks **dashboard**. 2) A small machine-learning model, tracked with **MLflow** and registered in Unity Catalog.
+# MAGIC The data is random, so the model scores about AUC 0.5 (no better than a coin flip). That is the honest result, not a bug.
 
 # COMMAND ----------
 
 # MAGIC %md ## 1. Dashboard datasets
 # MAGIC Create a SQL warehouse (serverless) and a new **Dashboard**. Use these queries as datasets:
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC These cells print three SQL queries. Create a **SQL warehouse** (serverless) and a new **Dashboard**, add each query as a dataset, and build a chart for each. Dashboards query live tables, which is why gold must stay stable.
 
 # COMMAND ----------
 
@@ -25,6 +37,12 @@ for name, q in QUERIES.items():
 # COMMAND ----------
 
 # MAGIC %md ## 2. A model that predicts serious incidents
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC Feature preparation. We select a few columns from silver, turn the severity into a 0/1 label `serious`, one-hot encode the text columns with `get_dummies`, and split the data into training (80%) and test (20%) sets.
+# MAGIC `toPandas()` pulls the data into the driver's memory: fine for small data, never do it with big tables. If `import` fails, add a cell `%pip install scikit-learn mlflow` and restart.
 
 # COMMAND ----------
 
@@ -45,6 +63,12 @@ pdf = spark.sql(
 X = pd.get_dummies(pdf.drop(columns="serious"), columns=["location_id", "incident_type"])
 y = pdf["serious"]
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC Trains a random forest, measures **AUC** on the held-out test data (0.5 = no signal, 1.0 = perfect) and logs the metric and the model with **MLflow**.
+# MAGIC `databricks-uc` stores the model in Unity Catalog as `shield.gold.serious_incident_model` with versions and permissions. **Expect:** `AUC = 0.5xx`, and the model under **Catalog → shield → gold**.
 
 # COMMAND ----------
 

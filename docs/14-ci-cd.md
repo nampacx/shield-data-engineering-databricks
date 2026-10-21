@@ -4,6 +4,21 @@
 
 > Status: the `test` job runs plain Python and Spark-free logic; the bundle jobs are **untested** and switched off until you set the repo variable `DATABRICKS_CI=true` and the secrets.
 
+## How to do this chapter
+
+**Before you start:** Python 3.11+ on your machine and the repo cloned locally. This chapter has **no notebook**: you work in a terminal and on GitHub.
+
+**Steps**
+1. Open a terminal in the repo folder and create an isolated environment: `python -m venv .venv`, then activate it (Windows PowerShell: `.venv\Scripts\Activate.ps1`; macOS/Linux: `source .venv/bin/activate`).
+2. Install the tools: `pip install -r requirements.txt`.
+3. Run `ruff check .` and then `pytest -q`. Both should finish without errors.
+4. To see CI: push a branch, open a pull request on GitHub, and look at the **Checks** tab of the pull request (or the repo's **Actions** tab) to watch the workflow.
+5. Optional: break a test on purpose, push, and watch the check go red.
+
+**What you should see:** `ruff` reporting no problems and `pytest` ending in a line like `N passed` (the Spark parity test is skipped unless `pyspark` is installed).
+
+The Databricks jobs in the workflow stay switched off until you configure the secrets described below. Never put tokens in the repo.
+
 ## Concepts
 * **CI** (every PR): lint (`ruff`), unit tests (`pytest`), bundle validation. Fast, no production access.
 * **CD** (merge to main): deploy the bundle to prod, behind an approval gate.

@@ -2,6 +2,19 @@
 
 **Notebook:** [02_first_recon.py](../notebooks/databricks/02_first_recon.py)
 
+## How to run this chapter
+
+**Before you start:** chapter 01 is done, so the `shield` catalog and the volume `shield.landing.staging` exist.
+
+**Steps**
+1. Open the notebook and connect serverless compute ([How to run a chapter notebook](how-to-run-notebooks.md), sections 1 to 3).
+2. Click **Run all**. The first code cell generates 10,000 incidents and writes them as files into the volume; the rest reads and explores them.
+3. Stop at *Spot the mess* and look at the three tables before reading on: these are the defects the next chapters fix.
+
+**What you should see:** a dictionary of row counts per feed from the first cell, the inferred schema, sample rows, and two aggregate tables (DataFrame version and SQL version) with identical numbers.
+
+Safe to re-run: the generator rewrites the same files (fixed seed 42). Chapter 03 needs these files, so do not skip this chapter.
+
 ## Concepts
 * **DataFrame**: a distributed table with a schema. **Transformations** (`filter`, `groupBy`, `join`) are lazy; **actions** (`count`, `display`, `write`) trigger work.
 * **SQL and DataFrames are the same engine.** Pick whichever reads better; mix freely with temp views.
@@ -10,6 +23,9 @@
 
 ## What the notebook does
 Generates 10,000 synthetic incidents with 5% defects into the volume `shield.landing.staging`, reads them, aggregates them, and asks you to find the defects by eye.
+
+## Where the data lives
+The generator writes into the Unity Catalog volume `shield.landing.staging` (path `/Volumes/shield/landing/staging`), backed by the workspace's managed cloud storage. One folder per feed: `incident_reports/` and `sensor_pings/` with `part-0000.json` to `part-0004.json`, and `agents/`, `locations/`, `threat_assessments/` with one CSV each. The notebook prints the listing with file sizes; you can also browse it under **Catalog** → `shield` → `landing` → `staging`.
 
 ## Gotchas
 * `spark.read.json` infers the schema by reading data: fine here, slow and fragile in production (chapter 03 fixes that).

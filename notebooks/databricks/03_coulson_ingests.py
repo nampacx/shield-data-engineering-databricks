@@ -5,6 +5,21 @@
 # MAGIC
 # MAGIC Goal: land raw files into **bronze** Delta tables incrementally, remembering what was already read.
 # MAGIC Expect one deliberate failure in the schema-drift section.
+# MAGIC
+# MAGIC **How to run:** connect serverless compute and run the cells **one by one** (Shift+Enter) the first time, reading the printed counts.
+# MAGIC
+# MAGIC **Needs:** chapter 02 done (staged files in `shield.landing.staging`).
+# MAGIC
+# MAGIC **What happens:** two helper functions are defined. `deliver()` copies the next staged file into the `raw` volume (simulating a delivery from the field).
+# MAGIC `ingest()` uses **Auto Loader** to load only *new* files from `raw` into a bronze Delta table, remembering what it already read in a checkpoint.
+# MAGIC Expected on purpose: one failure in the schema-drift section, caught and printed as `Expected failure: ...`.
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC **The two helpers.** `deliver(feed, n)` copies the next `n` files that are not yet in `raw`. `ingest(feed, fmt, table)` reads `raw` with `cloudFiles` (Auto Loader),
+# MAGIC stores the inferred schema in `schemaLocation`, adds two lineage columns (`_source_file`, `_ingested_at`), and writes to `shield.bronze.<table>`.
+# MAGIC `trigger(availableNow=True)` means "process everything new, then stop": incremental *batch*, not an endless stream. Run this cell; it only defines functions, so nothing is printed.
 
 # COMMAND ----------
 
@@ -56,6 +71,12 @@ def ingest(feed: str, fmt: str, table: str) -> None:
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC The three small CSV feeds (agents, locations, threat assessments) are delivered once and ingested. **Expect:** three `delivered [...]` lines.
+# MAGIC Check **Catalog → shield → bronze** afterwards: three new tables.
+
+# COMMAND ----------
+
 for feed in ["agents", "locations", "threat_assessments"]:
     deliver(feed)
     ingest(feed, "csv", feed)
@@ -66,15 +87,30 @@ for feed in ["agents", "locations", "threat_assessments"]:
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC The first incident file arrives and is loaded. **Expect:** a row count (a bit under 2,000). Remember it.
+
+# COMMAND ----------
+
 deliver("incident_reports", 1)
 ingest("incident_reports", "json", "incident_reports")
 print(spark.table("shield.bronze.incident_reports").count())
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC Same call, no new file. **Expect:** the *same* count. This is the checkpoint at work: Auto Loader knows it already read everything.
+
+# COMMAND ----------
+
 # Running again with no new files processes nothing: that is the checkpoint at work.
 ingest("incident_reports", "json", "incident_reports")
 print(spark.table("shield.bronze.incident_reports").count())
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC Three more files arrive. **Expect:** the count rises by about three files' worth of rows.
 
 # COMMAND ----------
 
@@ -90,11 +126,22 @@ print(spark.table("shield.bronze.incident_reports").count())
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC The last file has a new field. With `addNewColumns`, Auto Loader stops once after saving the new schema. We catch the error so the notebook keeps going.
+# MAGIC **Expect:** a line starting with `Expected failure:`. That is the lesson, not a problem.
+
+# COMMAND ----------
+
 deliver("incident_reports", 1)
 try:
     ingest("incident_reports", "json", "incident_reports")
 except Exception as e:  # noqa: BLE001
     print("Expected failure:", type(e).__name__, str(e)[:200])
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC Run the ingest again: now it succeeds, and the new column `source_channel` exists. Older rows have `NULL` there. **Expect:** a table with some `source_channel` values.
 
 # COMMAND ----------
 
@@ -104,6 +151,12 @@ display(spark.table("shield.bronze.incident_reports").filter("source_channel IS 
 # COMMAND ----------
 
 # MAGIC %md ## Bronze keeps everything, including duplicates and bad rows
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC Bronze keeps everything, including duplicates and bad rows, on purpose: it is your audit trail and your replay source.
+# MAGIC **Expect:** more rows than distinct `incident_id`s. Chapters 05 and 06 clean this up.
 
 # COMMAND ----------
 

@@ -6,6 +6,18 @@
 # MAGIC **Part A** streams the sensor pings from files (no extra infrastructure).
 # MAGIC **Part B** reads the same shape of data from **Event Hubs** through its Kafka endpoint and adds a watermark.
 # MAGIC Part B needs a secret and is the least verified part of this repo: see `docs/09-quake-tremors.md`.
+# MAGIC
+# MAGIC **How to run:** connect compute and run Part A (cells 1 and 2). Part B is optional and needs setup; with the `eventhub_namespace` box empty it prints `Skipping part B` and does nothing.
+# MAGIC
+# MAGIC **Needs:** chapter 02 done (`sensor_pings` files in the staging volume).
+# MAGIC
+# MAGIC **What happens:** sensor pings are aggregated into **one-minute windows per location** with Structured Streaming. Part A reads files. Part B reads the same kind of data from Azure Event Hubs
+# MAGIC (through its Kafka-compatible endpoint) and adds a **watermark**.
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC Two paths: where the ping files are, and where the stream stores its checkpoint (its bookmark so it can restart without losing or double-counting data).
 
 # COMMAND ----------
 
@@ -17,6 +29,14 @@ CP = "/Volumes/shield/landing/checkpoints/pings"
 # COMMAND ----------
 
 # MAGIC %md ## Part A: windowed aggregates over a file stream
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC **Structured Streaming** treats incoming data like an ever-growing table; you write normal DataFrame code. Here the source is Auto Loader (`cloudFiles`) over the ping files.
+# MAGIC `filter("energy_reading BETWEEN 0 AND 500")` removes sensor glitches (the generator injects `-999` and `1000000`). `F.window("event_time", "1 minute")` buckets events by
+# MAGIC **when they happened**, not when they arrived. The query is written with `trigger(availableNow=True)`: process what exists, then stop.
+# MAGIC **Expect:** a table of windows (`start`, `end`, `location_id`, `avg_energy`, `pings`).
 
 # COMMAND ----------
 
@@ -53,8 +73,29 @@ display(spark.table("shield.silver.ping_windows").orderBy("start").limit(10))
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC Optional Part B. Fill the `eventhub_namespace` box only after you completed *Setting up Part B* in the chapter doc (publish pings with `scripts/send_pings.py`, create the secret scope `shield` with the key `eventhubs-conn`).
+# MAGIC The box appears after this cell has run; fill it and run the next cell.
+
+# COMMAND ----------
+
 dbutils.widgets.text("eventhub_namespace", "", "Event Hubs namespace (azd EVENT_HUB_NAMESPACE)")
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC Fill the `eventhub_namespace` box (or leave it empty to skip Part B), then run the cell below to read it.
+
+# COMMAND ----------
+
 ns = dbutils.widgets.get("eventhub_namespace")
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC Reads Event Hubs via the `kafka` source. The connection string comes from the Databricks secret (never type it into a notebook). `withWatermark("event_time", "10 minutes")` says "wait up to 10 minutes for late events",
+# MAGIC which lets Spark finish windows and drop old state. With `append` output a window is written only once the watermark passes its end, so the latest windows may stay missing: correct behaviour.
+# MAGIC If the Kafka source is rejected on serverless, switch to classic compute.
 
 # COMMAND ----------
 

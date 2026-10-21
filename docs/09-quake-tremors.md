@@ -4,6 +4,19 @@
 
 > Status: **Part A** is plain Structured Streaming. **Part B (Event Hubs) is the least verified piece of the repo**: it needs a secret and compute that supports the Kafka source.
 
+## How to run this chapter
+
+**Before you start:** chapter 02 is done (`sensor_pings` files are staged). Part B is optional and needs extra Azure setup, described under *Setting up Part B* below.
+
+**Steps**
+1. Open the notebook and connect serverless compute ([How to run a chapter notebook](how-to-run-notebooks.md), sections 1 to 3).
+2. Run Part A (the first two code cells) with Shift+Enter, or **Run all**. Part A needs nothing else.
+3. For Part B, follow *Setting up Part B* below, run the cell that creates the `eventhub_namespace` widget so the box appears, fill it, then run the cells below it one by one. With the widget empty, Part B prints `Skipping part B` and does nothing.
+
+**What you should see:** Part A: a table of per-minute averages per location. Part B: a second table, `ping_windows_live`, fed from Event Hubs.
+
+Part B is the least verified piece of the repo and costs a little money while Event Hubs exists. It is fine to finish the course without it.
+
 ## Concepts
 * **Structured Streaming** treats a stream as an ever-growing table; your query is the same DataFrame code.
 * **Event time vs processing time**: aggregate by *when it happened*, not when it arrived.

@@ -2,6 +2,19 @@
 
 **Notebook:** [06_natasha_spots_the_fake.py](../notebooks/databricks/06_natasha_spots_the_fake.py) · **Rules:** [quality.py](../src/shield_data/quality.py)
 
+## How to run this chapter
+
+**Before you start:** chapters 03 and 05 are done (bronze incidents and `silver.locations`) and the repo is a Git folder, because this notebook imports `shield_data.quality`.
+
+**Steps**
+1. Open the notebook and connect serverless compute ([How to run a chapter notebook](how-to-run-notebooks.md), sections 1 to 3).
+2. Click **Run all**, or step through to inspect `failed_rules` on a few rows.
+3. Read the *Which rules fail most?* table and the severity table after it.
+
+**What you should see:** a `valid` and `invalid` count, a quarantine table ranking the rules by failures, a clean severity list, and a final line `Rejected by constraint: ...`.
+
+This notebook **overwrites** `silver.incident_reports` from chapter 05 (that is intended). If you re-run it and the `ADD CONSTRAINT` cell complains that the constraint already exists, that is harmless; skip that cell.
+
 ## Concepts
 * **Data quality dimensions**: validity (is the value allowed?), completeness (is it present?), uniqueness, timeliness, consistency.
 * **Rules as data**: a dictionary `name → SQL expression`, defined once in `src/shield_data/quality.py` and reused by the notebook, the pipeline, and the tests.

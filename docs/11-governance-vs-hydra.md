@@ -2,6 +2,20 @@
 
 **Notebook:** [11_governance_vs_hydra.py](../notebooks/databricks/11_governance_vs_hydra.py)
 
+## How to run this chapter
+
+**Before you start:** chapters 04 and 05 are done (`shield.silver.agents` and `shield.gold.daily_threat_briefing` exist). The `fury` group is optional: without it everyone is simply treated as not-Fury.
+
+**Steps**
+1. Open the notebook and connect serverless compute ([How to run a chapter notebook](how-to-run-notebooks.md), sections 1 to 3).
+2. Click **Run all**, or step section by section to see the effect of each policy.
+3. In section 2 compare the codenames before and after the mask; in section 3 compare the counts per clearance level.
+4. Make sure the last cleanup cell runs: it removes the mask and the filter so later chapters see real data.
+
+**What you should see:** codenames shown as `*** CLASSIFIED ***`, only clearance 1 to 3 agents visible, tag rows from `column_tags`, and either lineage rows or the message `System tables not enabled yet`.
+
+If a run stops before the cleanup cell, run the two cleanup statements yourself. Otherwise `silver.agents` keeps its mask and filter.
+
 ## Concepts
 * **Securable hierarchy**: metastore → catalog → schema → table/view/volume/function. Privileges are inherited downward. Access to a table needs `USE CATALOG` + `USE SCHEMA` + `SELECT`.
 * **Least privilege by layer**: consumers get gold; engineers get bronze/silver; only pipelines write.

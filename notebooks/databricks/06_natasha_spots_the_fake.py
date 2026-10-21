@@ -5,6 +5,20 @@
 # MAGIC
 # MAGIC Pattern: evaluate named rules on every row → valid rows to silver, invalid rows to a **quarantine** table
 # MAGIC with the list of rules they failed. Nothing is silently dropped.
+# MAGIC
+# MAGIC **How to run:** connect serverless compute, then **Run all**.
+# MAGIC
+# MAGIC **Needs:** chapters 03 and 05 done. The repo must be a Git folder (the notebook imports `shield_data.quality`).
+# MAGIC
+# MAGIC **What happens:** every incident is checked against named rules. Rows that pass go to silver, rows that fail go to a **quarantine** table together with the
+# MAGIC names of the rules they broke. Nothing is silently dropped. At the end a Delta constraint makes the table itself refuse bad data.
+# MAGIC This notebook **overwrites** `silver.incident_reports` from chapter 05 (intended).
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC `INCIDENT_RULES` is a dictionary `rule name → SQL condition`, defined once in `src/shield_data/quality.py` and reused by this notebook, the pipeline and the tests.
+# MAGIC **Expect:** the dictionary printed under the cell. Read the rule names, you will see them again.
 
 # COMMAND ----------
 
@@ -25,6 +39,12 @@ INCIDENT_RULES
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC For every row, each rule's SQL expression is evaluated. `coalesce(..., False)` makes a NULL result count as a **failure** (in SQL, NULL is neither true nor false).
+# MAGIC The column `failed_rules` is an array with the names of the rules that row broke; an empty array means the row is clean.
+
+# COMMAND ----------
+
 bronze = spark.table("shield.bronze.incident_reports")
 parsed = bronze.withColumn("reported_ts", F.expr("try_to_timestamp(reported_at, \"yyyy-MM-dd'T'HH:mm:ss'Z'\")"))
 
@@ -36,6 +56,11 @@ checked = parsed.withColumn("failed_rules", F.filter(failed, lambda x: x.isNotNu
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC Split the data in two: no failed rules = valid, otherwise invalid. **Expect:** a line `valid: N invalid: M`. The invalid share should be close to the 5% defects the generator injected.
+
+# COMMAND ----------
+
 valid = checked.filter(F.size("failed_rules") == 0).drop("failed_rules")
 invalid = checked.filter(F.size("failed_rules") > 0)
 print("valid:", valid.count(), "invalid:", invalid.count())
@@ -43,6 +68,11 @@ print("valid:", valid.count(), "invalid:", invalid.count())
 # COMMAND ----------
 
 # MAGIC %md ## Silver (deduplicated, valid only) and quarantine
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC Valid rows are deduplicated (latest copy per `incident_id`) and saved to silver. Invalid rows go to `silver.incident_reports_quarantine` with a timestamp. Nothing is lost, and you can later ask "what exactly did we reject?".
 
 # COMMAND ----------
 
@@ -62,6 +92,11 @@ latest = Window.partitionBy("incident_id").orderBy(F.col("_ingested_at").desc())
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC `explode` turns the array of failed rules into one row per failure, so we can count which rule fails most. This is how you find out which feed is sending garbage and what kind.
+
+# COMMAND ----------
+
 display(
     spark.table("shield.silver.incident_reports_quarantine")
     .select(F.explode("failed_rules").alias("rule"))
@@ -75,12 +110,23 @@ display(
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC **Compare with chapter 05:** only the four valid severities remain. If you want to see the effect on the business numbers, re-run the gold cells of notebook 05 now.
+
+# COMMAND ----------
+
 display(spark.sql("SELECT severity, COUNT(*) AS n FROM shield.silver.incident_reports GROUP BY severity"))
 
 # COMMAND ----------
 
 # MAGIC %md ## Belt and braces: a Delta CHECK constraint
 # MAGIC Rules in the pipeline catch bad data on the way in; a constraint makes the table itself refuse it.
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC A **CHECK constraint** is the last line of defence: even a careless manual `INSERT` cannot put negative casualties into the table. The `try` block attempts exactly that.
+# MAGIC **Expect:** `Rejected by constraint: ...`. If you re-run and the `ADD CONSTRAINT` statement says the constraint already exists, that is fine.
 
 # COMMAND ----------
 

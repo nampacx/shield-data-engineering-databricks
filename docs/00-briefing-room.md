@@ -4,6 +4,19 @@
 
 **Notebook:** [00_briefing_room.py](../notebooks/databricks/00_briefing_room.py) · **Story:** [story.md](../story.md)
 
+## How to run this chapter
+
+**Before you start:** nothing from earlier chapters. You only need a workspace and the repo as a Git folder (section 1 of [How to run a chapter notebook](how-to-run-notebooks.md)). No catalog or storage setup is needed yet.
+
+**Steps**
+1. Open the notebook and connect serverless compute ([How to run a chapter notebook](how-to-run-notebooks.md), sections 1 to 3).
+2. Click **Run all** in the toolbar.
+3. Read the output under each cell, then try the two exercises at the bottom.
+
+**What you should see:** a table with 5 rows (`agent_number` 0 to 4), a one-row table with your user name and the current catalog, and a line like `N S.H.I.E.L.D. locations loaded from /Workspace/...`.
+
+If the last cell fails with `ModuleNotFoundError: shield_data`, the repo was not cloned as a Git folder or the notebook was moved out of `notebooks/databricks/`. See [troubleshooting](troubleshooting.md). Safe to re-run any time.
+
 ## What a data engineer does
 A data engineer builds and runs the systems that move data from where it is created to where decisions are made, and keeps it **correct, fresh, secure, and affordable** on the way. The daily work:
 
@@ -26,6 +39,12 @@ sources → ingest → bronze (raw) → silver (clean) → gold (business-ready)
 * **Delta Lake**: table format on cloud storage with transactions, history, and schema control.
 * **Unity Catalog**: catalogs → schemas → tables/volumes, with permissions and lineage.
 * **Lakeflow**: Jobs (orchestration), Spark Declarative Pipelines (declarative ETL), Connect (ingestion).
+
+## Want the full map?
+Read [Core concepts](core-concepts.md): account vs workspace, Unity Catalog, and serverless vs cluster compute, explained properly.
+
+## New to notebooks?
+Read [How to run a chapter notebook](how-to-run-notebooks.md) once. Every later chapter relies on it.
 
 ## Repo tour
 `infra/` (Bicep) · `notebooks/databricks/` (chapters) · `pipelines/` (declarative pipeline code) · `resources/` + `databricks.yml` (bundle) · `src/shield_data/` (data generator + quality rules) · `tests/` · `docs/`.

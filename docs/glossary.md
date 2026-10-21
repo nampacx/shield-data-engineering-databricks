@@ -1,5 +1,7 @@
 # Glossary
 
+For how these pieces fit together, see [Core concepts](core-concepts.md).
+
 | Term | Meaning |
 |---|---|
 | ACID | Atomic, Consistent, Isolated, Durable: transaction guarantees Delta gives you on files |

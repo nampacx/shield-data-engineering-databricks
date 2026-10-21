@@ -13,6 +13,19 @@
 # MAGIC 3. Task `silver`: `step=silver`, depends on `ingest`. Task `gold`: `step=gold`, depends on `silver`.
 # MAGIC 4. Set **Retries = 2** on each task, add a failure **notification**, add a schedule (start it *paused*).
 # MAGIC 5. **Run now**, then run again: results must be identical (idempotency).
+# MAGIC
+# MAGIC **How to run (by hand first):** connect serverless compute, run the first code cell so the `step` dropdown appears, pick `ingest`, then run the cells below it (cell menu → **Run All Below**). Repeat with `silver`, then `gold`.
+# MAGIC Afterwards build the job (steps above) so these three runs happen automatically.
+# MAGIC
+# MAGIC **Needs:** chapters 03 to 06 done (bronze incidents, `silver.locations`, quality rules).
+# MAGIC
+# MAGIC **What happens:** the same notebook does a different job depending on the `step` widget. That is how one notebook becomes three job tasks. Each step is **idempotent**: running it twice gives the same result, so retries are safe.
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC Setup plus two widgets. `step` (dropdown: `ingest`, `silver`, `gold`) selects what to do. `deliver_files` (text, default `1`) says how many raw files the ingest step copies in. In a job, you set these as task parameters instead of clicking.
+# MAGIC Run this cell, pick a step in the dropdown, then run the rest.
 
 # COMMAND ----------
 
@@ -29,11 +42,39 @@ from shield_data.quality import INCIDENT_RULES
 
 dbutils.widgets.dropdown("step", "ingest", ["ingest", "silver", "gold"], "Pipeline step")
 dbutils.widgets.text("deliver_files", "1", "Files to deliver (ingest step only)")
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC Pick the `step` in the dropdown above, then run the cell below to read it. (In a job, the task parameter sets it for you.)
+
+# COMMAND ----------
+
 step = dbutils.widgets.get("step")
 
 STAGING, RAW = Path("/Volumes/shield/landing/staging"), Path("/Volumes/shield/landing/raw")
 CP = "/Volumes/shield/landing/checkpoints"
 TS = "yyyy-MM-dd'T'HH:mm:ss'Z'"
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC **Step `ingest`:** copies the next undelivered file(s) into `raw` (files already there are skipped = idempotent), then loads new files into bronze with Auto Loader, as in chapter 03.
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC **Step `silver`:** applies the quality rules, keeps the latest valid row per incident and writes silver, and writes failures to quarantine (chapter 06). It **overwrites** the tables from bronze, so repeating it changes nothing.
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC **Step `gold`:** rebuilds the daily briefing table from silver. Also a full replace, so safe to repeat.
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC This line picks the function that matches the widget value and runs it. **Expect:** `step '<name>' done`. In the job run page, a green task means this line printed without an error.
 
 # COMMAND ----------
 

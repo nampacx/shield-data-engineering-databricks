@@ -95,10 +95,10 @@ def make_incidents(
         elif defect == "bad_ts":
             row["reported_at"] = "not-a-timestamp"
 
-    # Duplicates (late/replayed deliveries): re-emit some existing rows.
+    # Duplicates (late/replayed deliveries): re-emit some existing rows at the end.
+    # Row order is kept (no shuffle) so schema drift only shows up in the last files.
     dups = [dict(r) for r in rng.sample(rows, k=int(len(rows) * dirty / 2))] if dirty else []
     rows.extend(dups)
-    rng.shuffle(rows)
     return rows
 
 

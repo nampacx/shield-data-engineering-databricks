@@ -70,27 +70,27 @@ This creates: a Databricks workspace (Premium), ADLS Gen2 storage, an access con
 
 ## Chapters
 
-| # | Chapter | Topic | Status |
-|---|---|---|---|
-| 00 | Briefing room | Concepts, glossary, repo tour | planned |
-| 01 | Assemble the platform | Bicep + azd, Unity Catalog | planned |
-| 02 | First recon | Spark, SQL, compute | planned |
-| 03 | Coulson ingests | Volumes, Auto Loader | planned |
-| 04 | Delta Lake 101 | ACID, MERGE, OPTIMIZE | planned |
-| 05 | Medallion | Bronze, silver, gold | planned |
-| 06 | Natasha spots the fake | Data quality | planned |
-| 07 | Doctor Strange's time stone | Time travel, CDF | planned |
-| 08 | Declarative pipelines | Lakeflow Spark Declarative Pipelines | planned |
-| 09 | Quake tremors | Structured Streaming | planned |
-| 10 | Maria Hill schedules | Lakeflow Jobs | planned |
-| 11 | Governance vs Hydra | Unity Catalog | planned |
-| 12 | Hawkeye's precision | Performance and cost | planned |
-| 13 | Infrastructure as code | Databricks Asset Bundles | planned |
-| 14 | CI/CD | GitHub Actions | planned |
-| 15 | The Avengers Initiative | Serving, dashboards, MLflow | planned |
-| 16 | Project Insight | Capstone | planned |
+| # | Chapter | Topic | Docs | Notebook | Status |
+|---|---|---|---|---|---|
+| 00 | Briefing room | Concepts, repo tour | [doc](docs/00-briefing-room.md) | [00_briefing_room.py](notebooks/databricks/00_briefing_room.py) | drafted |
+| 01 | Assemble the platform | Unity Catalog bootstrap | [doc](docs/01-assemble-the-platform.md) | [01_assemble_the_platform.py](notebooks/databricks/01_assemble_the_platform.py) | drafted (Azure part verified) |
+| 02 | First recon | Spark, SQL, compute | [doc](docs/02-first-recon.md) | [02_first_recon.py](notebooks/databricks/02_first_recon.py) | drafted |
+| 03 | Coulson ingests | Volumes, Auto Loader | [doc](docs/03-coulson-ingests.md) | [03_coulson_ingests.py](notebooks/databricks/03_coulson_ingests.py) | drafted |
+| 04 | Delta Lake 101 | ACID, MERGE, OPTIMIZE | [doc](docs/04-delta-lake-101.md) | [04_delta_lake_101.py](notebooks/databricks/04_delta_lake_101.py) | drafted |
+| 05 | Medallion | Bronze, silver, gold | [doc](docs/05-medallion.md) | [05_medallion.py](notebooks/databricks/05_medallion.py) | drafted |
+| 06 | Natasha spots the fake | Data quality | [doc](docs/06-natasha-spots-the-fake.md) | [06_natasha_spots_the_fake.py](notebooks/databricks/06_natasha_spots_the_fake.py) | drafted (rules unit-tested) |
+| 07 | Doctor Strange's time stone | Time travel, CDF | [doc](docs/07-doctor-strange-time-stone.md) | [07_doctor_strange_time_stone.py](notebooks/databricks/07_doctor_strange_time_stone.py) | drafted |
+| 08 | Declarative pipelines | Lakeflow Spark Declarative Pipelines | [doc](docs/08-declarative-pipelines.md) | [08_declarative_pipelines.py](notebooks/databricks/08_declarative_pipelines.py) | drafted |
+| 09 | Quake tremors | Structured Streaming, Event Hubs | [doc](docs/09-quake-tremors.md) | [09_quake_tremors.py](notebooks/databricks/09_quake_tremors.py) | drafted (part B unverified) |
+| 10 | Maria Hill schedules | Lakeflow Jobs | [doc](docs/10-maria-hill-schedules.md) | [10_maria_hill_schedules.py](notebooks/databricks/10_maria_hill_schedules.py) | drafted |
+| 11 | Governance vs Hydra | Unity Catalog | [doc](docs/11-governance-vs-hydra.md) | [11_governance_vs_hydra.py](notebooks/databricks/11_governance_vs_hydra.py) | drafted |
+| 12 | Hawkeye's precision | Performance and cost | [doc](docs/12-hawkeyes-precision.md) | [12_hawkeyes_precision.py](notebooks/databricks/12_hawkeyes_precision.py) | drafted |
+| 13 | Infrastructure as code | Declarative Automation Bundles | [doc](docs/13-infrastructure-as-code.md) | n/a (config chapter) | drafted (not validated) |
+| 14 | CI/CD | GitHub Actions | [doc](docs/14-ci-cd.md) | n/a (config chapter) | drafted (tests run locally) |
+| 15 | The Avengers Initiative | Serving, dashboards, MLflow | [doc](docs/15-avengers-initiative.md) | [15_avengers_initiative.py](notebooks/databricks/15_avengers_initiative.py) | drafted |
+| 16 | Project Insight | Capstone, runbook | [doc](docs/16-project-insight.md) | [16_project_insight.py](notebooks/databricks/16_project_insight.py) | drafted |
 
-Status values: `planned`, `drafted` (written, not run), `verified` (run end to end in a real workspace).
+Status values: `planned`, `drafted` (written and checked against Microsoft Learn, **not yet run** in a real workspace), `verified` (run end to end). Nothing is `verified` yet. Extra guides: [glossary](docs/glossary.md), [troubleshooting](docs/troubleshooting.md), [runbook](docs/runbook.md).
 
 ## Dataset
 

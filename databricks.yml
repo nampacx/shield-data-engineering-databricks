@@ -1,0 +1,21 @@
+# Declarative Automation Bundle (formerly Databricks Asset Bundles). Chapter 13.
+# Workspace host comes from the CLI profile or the DATABRICKS_HOST environment variable.
+bundle:
+  name: shield_insight
+
+variables:
+  catalog:
+    description: Unity Catalog catalog that holds the data
+    default: shield
+
+include:
+  - resources/*.yml
+
+targets:
+  dev:
+    mode: development # resources are prefixed with your username and schedules are paused
+    default: true
+  prod:
+    mode: production
+    workspace:
+      root_path: /Workspace/Shared/.bundle/${bundle.name}/${bundle.target}

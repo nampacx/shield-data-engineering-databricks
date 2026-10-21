@@ -1,0 +1,12 @@
+resources:
+  pipelines:
+    shield_insight:
+      name: shield_insight_${bundle.target}
+      catalog: ${var.catalog}
+      schema: pipeline_${bundle.target}
+      serverless: true
+      libraries:
+        - file:
+            path: ../pipelines/shield_insight.py
+      configuration:
+        raw_path: /Volumes/${var.catalog}/landing/raw

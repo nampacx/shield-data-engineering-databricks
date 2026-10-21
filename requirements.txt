@@ -1,0 +1,6 @@
+pytest>=8
+ruff>=0.6
+# Optional: only for scripts/send_pings.py (chapter 09) and the Spark parity test
+# azure-eventhub
+# azure-identity
+# pyspark

@@ -116,6 +116,7 @@ flowchart TD
 * `schemaEvolutionMode = addNewColumns` (also the default when you give no schema): the first run that meets a new field fails once, after saving the new schema. Microsoft Learn names the error `UnknownFieldException`. `mergeSchema` on the write lets the bronze table add the column. Existing rows get `NULL` in it.
 * The generator adds `source_channel` (`radio`, `satellite` or `informant`) to the last 20 % of the incidents. That starts in the **fourth** file `part-0003.json`, where 200 of the 2,050 rows have it; 1,845 of the 2,050 rows of `part-0004.json` have it too (the other 205 are replayed duplicates of older incidents, which never had it). That is why Step 4 delivers files with `total=3` and stops before the drift.
 * Step 5 delivers files 4 and 5 and catches the expected error. Step 6 is the restart: the same `ingest()` call, unchanged.
+* **Why the restart works:** before it fails, Auto Loader saves the extended schema as a new file in the `_schemas` folder of the schema location (`.../checkpoints/incident_reports/schema/_schemas`). The restart reads that file, so the field is no longer new. Step 5 shows it: the cell counts the files in `_schemas` and checks whether the newest one mentions `source_channel`, before and after the failed run. Microsoft Learn describes the `_schemas` folder; the file names and content are not verified here. Re-running Step 5 would succeed and show no new file, because the schema is already saved.
 
 **The modes** (Microsoft Learn):
 
@@ -147,7 +148,7 @@ A `deliver()` function simulates files arriving; `ingest()` loads new ones to `s
 | 2 | First incident file | 2,050 rows from 1 source file; no `source_channel` column |
 | 3 | Run again with nothing new (the checkpoint) | Still 2,050 |
 | 4 | Files 2 and 3 | 6,150 rows from 3 source files; still no `source_channel` |
-| 5 | Files 4 and 5 bring `source_channel` (deliberate failure) | The stream stops once with an unknown-field error; the table still has 6,150 rows |
+| 5 | Files 4 and 5 bring `source_channel` (deliberate failure) | The stream stops once with an unknown-field error; the table still has 6,150 rows; `_schemas` gains one file that mentions `source_channel` |
 | 6 | Restart: same call again | 10,250 rows from 5 files; `source_channel` exists, 2,045 rows have a value (200 + 1,845), 8,205 are `NULL` |
 | 7 | Bronze keeps everything | 10,250 rows; 10,000 distinct `incident_id`; 250 ids twice; 96 missing agents; 110 invalid severity (`catastrophic`); 2,050 rows in each of the five files |
 

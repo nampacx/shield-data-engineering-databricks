@@ -11,6 +11,14 @@
 
 Why layers? Debuggability (compare layers to find where a number went wrong), reprocessing (rebuild silver from bronze), and separation of concerns (engineers own bronze/silver, analysts consume gold).
 
+## How this repo implements it
+* One Unity Catalog schema per layer: `shield.bronze`, `shield.silver`, `shield.gold`. The table name stays the same across layers (`incident_reports`).
+* Each layer reads only the one before it: silver reads bronze, gold reads silver. Gold never reads bronze.
+* Silver transforms rows (parse the timestamp, keep the newest record per key). Gold is a `GROUP BY` named after the question it answers.
+* The medallion is a pattern, not a feature. Nothing enforces the layers except naming and team discipline.
+
+The notebook opens with the same picture and walks through it.
+
 ## What the notebook does
 Five steps, each with a goal, an expected result and a check table: silver incidents (typed timestamp, latest record per `incident_id`: 10,250 bronze rows become 10,000), `silver.locations`, and the gold tables `daily_threat_briefing` and `location_risk`. It ends by counting the defects that got through.
 

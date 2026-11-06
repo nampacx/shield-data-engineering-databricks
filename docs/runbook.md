@@ -12,11 +12,12 @@ Jobs & Pipelines → `shield_daily` → latest run. Note the failed task key.
 | `silver` | Bronze table missing or schema changed in a breaking way | Compare `DESCRIBE shield.bronze.incident_reports` with the previous version (`VERSION AS OF`). |
 | `gold` | Silver empty or join keys missing | Count rows in `shield.silver.incident_reports` and `shield.silver.locations`. |
 | `health_check` | A data check failed (the message names it) | See below. |
+| `health_check` | `Missing tables` in the error | Not a data problem: an upstream table does not exist. Fix the task that should have created it, then repair the run. |
 
 ## 2. Health-check failures
 * `reconciliation`: rows disappeared between bronze and silver+quarantine. Compare counts per `_source_file`.
-* `quarantine_rate`: a producer is sending bad data. Group the quarantine table by `failed_rules` and `_source_file`; tell the owner of the feed.
-* `gold_freshness`: the gold task did not write. Check the `gold` task output and `DESCRIBE HISTORY`.
+* `quarantine_rate`: a producer is sending bad data. Explode `failed_rules` in the quarantine table and group by rule and `_source_file`; tell the owner of the feed.
+* `gold_freshness`: gold has not changed for 24 hours. Check the `gold` task output and `DESCRIBE HISTORY`. If you ran the notebook by hand long after the last job, this is expected: run `gold` first.
 * `silver_unique`: duplicates leaked. Re-run `silver` (full overwrite is idempotent).
 
 ## 3. Bad data already in gold?

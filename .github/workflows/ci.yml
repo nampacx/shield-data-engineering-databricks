@@ -19,6 +19,7 @@ jobs:
           java-version: "17"
       - run: pip install -r requirements.txt pyspark
       - run: ruff check .
+      - run: python scripts/check_notebooks.py
       - run: pytest -q
 
   bundle-validate:

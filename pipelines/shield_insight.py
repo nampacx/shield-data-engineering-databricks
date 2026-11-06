@@ -1,6 +1,6 @@
 """Lakeflow Spark Declarative Pipeline: raw incident files -> bronze -> silver -> gold.
 
-Run it as a pipeline (chapter 08) or deploy it with the bundle (chapter 13). It is NOT a notebook:
+Run it as a pipeline (chapter 08) or deploy it with the bundle (docs/deploy-and-automate.md). It is NOT a notebook:
 the decorators only work inside a pipeline. Target catalog and schema come from the pipeline settings.
 """
 

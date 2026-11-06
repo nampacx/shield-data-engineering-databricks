@@ -16,9 +16,8 @@ Use this to see which skills you can claim after each chapter, and which intervi
 | 10 Jobs | Orchestration, retries, alerting | How do you make a pipeline idempotent? |
 | 11 Governance | Access control, masking, lineage | How do you restrict PII columns? |
 | 12 Performance | Layout, file sizing, cost control | A query got slow: where do you look? |
-| 13 Bundles | Environment promotion as code | How do you promote dev to prod? |
-| 14 CI/CD | Testing data code, automated deploys | How do you unit-test a transformation? |
-| 15 Serving | BI serving and ML hand-off | Who consumes your gold tables and how? |
-| 16 Capstone | End-to-end ownership and operations | Walk me through a pipeline you built. |
+| 13 Serving | BI serving and ML hand-off | Who consumes your gold tables and how? |
+| 14 Capstone | End-to-end ownership and operations | Walk me through a pipeline you built. |
+| Deploy guide | Environment promotion as code, testing data code, automated deploys | How do you promote dev to prod? How do you unit-test a transformation? |
 
 Rehearse the capstone as a 5-minute walkthrough. It is the best interview story this repo gives you.

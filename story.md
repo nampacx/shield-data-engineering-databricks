@@ -58,18 +58,14 @@ Hydra tries to read what it should not. Permissions, masking, and lineage shut t
 
 One arrow, one target. Fewer files, smarter layout, cheaper queries.
 
-## 13 — Infrastructure as code
-
-The whole operation is described in a file and deployed identically every time.
-
-## 14 — CI/CD
-
-No change reaches production without passing tests.
-
-## 15 — The Avengers Initiative
+## 13 — The Avengers Initiative
 
 The gold layer finally has customers: dashboards for the field teams and a model that ranks threats.
 
-## 16 — Project Insight
+## 14 — Project Insight
 
 Everything together: raw feed to governed, monitored briefings, with a runbook for when it breaks at 3 a.m.
+
+## After hours — deploy and automate
+
+The whole operation is described in files and deployed identically every time, and no change reaches production without passing tests.

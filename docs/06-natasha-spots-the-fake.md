@@ -10,7 +10,7 @@
 * **Constraints** (`NOT NULL`, `CHECK`) make the *table* refuse bad writes: the last line of defence.
 
 ## What the notebook does
-Parses timestamps safely (`try_to_timestamp`), evaluates the rules, writes valid rows to silver and invalid ones to `silver.incident_reports_quarantine`, then adds a CHECK constraint.
+Five steps, each with a goal, an expected result and a check table. It parses timestamps safely (`try_to_timestamp`) and evaluates the rules (valid 9,739 rows, invalid 511). Valid rows go to silver (9,500 incidents) and invalid ones to `silver.incident_reports_quarantine`. It counts failures per rule, rebuilds the gold tables on clean data, then adds a CHECK constraint that the table enforces. The notebook is standalone: it needs chapter 03's bronze tables, not chapter 05.
 
 ## Tests
 `tests/test_quality.py` proves every injected defect is caught and, if `pyspark` is installed, that the Spark SQL rules agree with the Python mirror. This is how you unit-test data logic without a cluster.
@@ -20,4 +20,6 @@ Parses timestamps safely (`try_to_timestamp`), evaluates the rules, writes valid
 * Rules reflect business agreements; get them from the data owner, not from guessing.
 
 ## Try it yourself
-See the notebook. Bonus: add the rule to `quality.py`, run `pytest`, and see which test tells you to update the Python mirror.
+1. Add a rule: `agent_id` must exist in `silver.agents`. Which rows fail now? Add it to `quality.py`, run `pytest`, and see which test tells you to update the Python mirror.
+2. Turn the quarantine counts into a daily quality table in `shield.ops` (rule, date, failed_rows).
+3. Decide: for which rule would you rather *fail the job* than quarantine? Why?

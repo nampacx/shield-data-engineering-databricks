@@ -9,6 +9,8 @@ spec.loader.exec_module(check_notebooks)
 
 
 def _nb(tmp_path, cells):
+    for i, cell in enumerate(cells):
+        cell.setdefault("id", f"cell-{i}")
     path = tmp_path / "nb.ipynb"
     path.write_text(json.dumps({"nbformat": 4, "nbformat_minor": 5, "metadata": {}, "cells": cells}))
     return path
@@ -36,3 +38,13 @@ def test_flags_outputs_counts_run_and_syntax(tmp_path):
     ]
     problems = check_notebooks.check(_nb(tmp_path, cells))
     assert len(problems) == 4
+
+
+def test_flags_missing_and_duplicate_ids(tmp_path):
+    cell = _code("x = 1")
+    nb = {"nbformat": 4, "nbformat_minor": 5, "metadata": {}, "cells": [dict(cell), dict(cell, id="a"), dict(cell, id="a")]}
+    path = tmp_path / "ids.ipynb"
+    path.write_text(json.dumps(nb))
+    problems = check_notebooks.check(path)
+    assert any("no id" in p for p in problems)
+    assert any("not unique" in p for p in problems)

@@ -12,15 +12,16 @@ HEADER = "# Databricks notebook source"
 SEP = "# COMMAND ----------"
 
 
-def _cell(raw: str) -> dict:
+def _cell(raw: str, index: int) -> dict:
     lines = raw.strip("\n").split("\n")
     if lines and lines[0].startswith("# MAGIC %md"):
         first = lines[0].removeprefix("# MAGIC %md").strip()
         body = ([first] if first else []) + [
             ln.removeprefix("# MAGIC").removeprefix(" ") for ln in lines[1:]
         ]
-        return {"cell_type": "markdown", "metadata": {}, "source": _src(body)}
+        return {"id": f"cell-{index:03d}", "cell_type": "markdown", "metadata": {}, "source": _src(body)}
     return {
+        "id": f"cell-{index:03d}",
         "cell_type": "code",
         "execution_count": None,
         "metadata": {},
@@ -36,7 +37,7 @@ def _src(lines: list[str]) -> list[str]:
 def convert(path: Path) -> Path:
     text = path.read_text(encoding="utf-8")
     text = text.removeprefix(HEADER).lstrip("\n")
-    cells = [_cell(c) for c in text.split(SEP) if c.strip()]
+    cells = [_cell(c, i) for i, c in enumerate(c for c in text.split(SEP) if c.strip())]
     nb = {
         "cells": cells,
         "metadata": {

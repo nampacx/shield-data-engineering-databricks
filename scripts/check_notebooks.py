@@ -28,9 +28,14 @@ def check(path: Path) -> list[str]:
     problems: list[str] = []
     if nb.get("nbformat") != 4 or not isinstance(nb.get("cells"), list):
         return ["not an nbformat 4 notebook"]
+    ids = [c.get("id") for c in nb["cells"]]
+    if len(set(ids)) != len(ids):
+        problems.append("cell ids are not unique")
     for i, cell in enumerate(nb["cells"]):
         where = f"cell {i}"
         source = "".join(cell.get("source", []))
+        if not cell.get("id"):
+            problems.append(f"{where}: has no id (nbformat 4.5 needs one)")
         if cell.get("cell_type") != "code":
             continue
         if cell.get("outputs"):

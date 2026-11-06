@@ -50,3 +50,29 @@ Read this before you create or change a notebook. If your tool supports skills, 
 - After every change to code or output, re-read each markdown cell that describes it. They go stale silently.
 - Before a commit, run `python scripts/check_notebooks.py`: no outputs, no execution counts, every code cell parses.
 - Add a `CHANGELOG.md` line for every change a reader notices.
+
+# Writing documentation
+
+Read this before you create or change a `.md` file in `docs/`. If your tool supports skills, use `write-docs` ([.claude/skills/write-docs/SKILL.md](.claude/skills/write-docs/SKILL.md)). Reference example: [docs/05-medallion.md](docs/05-medallion.md).
+
+**Where**
+- Chapter docs are `docs/NN-<slug>.md` with the same `NN` and slug as the notebook. Guides (`deploy-and-automate`, `glossary`, `troubleshooting`, `runbook`, `data-engineering-roadmap`) stay unnumbered.
+- Link to code and notebooks with relative links instead of copying them. Quote only the short snippet the reader needs.
+
+**Structure** (a chapter doc is the deep dive; the notebook is the hands-on)
+1. `# NN · Title` and a line linking the notebook and any code files.
+2. `> 💡 **TL;DR:**` callout: the answer in two or three sentences.
+3. `## The big picture`: one mermaid diagram (GitHub renders mermaid in `.md` files) or a table.
+4. `## Concepts`: **every concept the chapter uses gets the full explanation**, in the same shape as in the notebook: the idea (say when it is a pattern and not a feature), a picture, **how this repo implements it** (exact schemas, tables, files, steps), why it helps, and what is not covered yet. Go further than the notebook: alternatives, trade-offs, common mistakes. A concept from an earlier chapter gets one sentence and a link.
+5. `## What the notebook does`: a table of the steps (step, goal, expected), with the same numbers as the notebook.
+6. `## Gotchas`, `## Not covered yet`, then `## Try it yourself` with 2 or 3 mini-projects, last.
+- Separate the big sections with `---` only if the doc is long. Say each fact once, in the section where the reader needs it.
+
+**Notebook and doc agree**
+- An explanation lives in both: the notebook has what the reader needs to follow the steps, the doc has the depth. When you change one, change the other in the same commit. Numbers, table names, step numbers and chapter references must match.
+- Don't describe an idea as if it were implemented. Say what is demo-grade, unverified, preview or not planned. Never write `verified` unless the chapter ran in a real workspace.
+
+**Style**
+- Short sentences. Say what the thing does, then why. Use the exact names from the repo (`shield.silver.incident_reports`, `INCIDENT_RULES`).
+- Tables for comparisons and lookups, bullets for short lists, code blocks for commands and config. One diagram per flow.
+- Emojis only as signposts: `💡` on the TL;DR, ✅ / ❌ for yes / no, ⚠️ for caution, 🧪 for preview. None in table cells or running text.

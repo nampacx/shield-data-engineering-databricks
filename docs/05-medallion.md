@@ -1,6 +1,6 @@
 # 05 · Medallion
 
-**Notebook:** [05_medallion.py](../notebooks/databricks/05_medallion.py)
+**Notebook:** [05_medallion.ipynb](../notebooks/databricks/05_medallion.ipynb)
 
 ## The layers
 | Layer | Contains | Rule of thumb |

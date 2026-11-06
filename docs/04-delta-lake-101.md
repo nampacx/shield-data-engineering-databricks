@@ -1,6 +1,6 @@
 # 04 · Delta Lake 101
 
-**Notebook:** [04_delta_lake_101.py](../notebooks/databricks/04_delta_lake_101.py)
+**Notebook:** [04_delta_lake_101.ipynb](../notebooks/databricks/04_delta_lake_101.ipynb)
 
 ## Concepts
 * **Delta = Parquet files + a transaction log** (`_delta_log`). Each commit adds a version. That gives you **ACID** transactions, **time travel** (chapter 07), and **concurrent-safe** writes.

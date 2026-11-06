@@ -1,6 +1,6 @@
 # 09 · Quake tremors
 
-**Notebook:** [09_quake_tremors.py](../notebooks/databricks/09_quake_tremors.py) · **Producer:** [scripts/send_pings.py](../scripts/send_pings.py)
+**Notebook:** [09_quake_tremors.ipynb](../notebooks/databricks/09_quake_tremors.ipynb) · **Producer:** [scripts/send_pings.py](../scripts/send_pings.py)
 
 > Status: **Part A** is plain Structured Streaming. **Part B (Event Hubs) is the least verified piece of the repo**: it needs a secret and compute that supports the Kafka source.
 

@@ -1,6 +1,6 @@
 # 06 · Natasha spots the fake
 
-**Notebook:** [06_natasha_spots_the_fake.py](../notebooks/databricks/06_natasha_spots_the_fake.py) · **Rules:** [quality.py](../src/shield_data/quality.py)
+**Notebook:** [06_natasha_spots_the_fake.ipynb](../notebooks/databricks/06_natasha_spots_the_fake.ipynb) · **Rules:** [quality.py](../src/shield_data/quality.py)
 
 ## Concepts
 * **Data quality dimensions**: validity (is the value allowed?), completeness (is it present?), uniqueness, timeliness, consistency.

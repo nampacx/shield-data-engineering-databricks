@@ -1,6 +1,6 @@
 # 15 · The Avengers Initiative
 
-**Notebook:** [15_avengers_initiative.py](../notebooks/databricks/15_avengers_initiative.py)
+**Notebook:** [15_avengers_initiative.ipynb](../notebooks/databricks/15_avengers_initiative.ipynb)
 
 ## Concepts
 * **Serving layer**: how gold data reaches people and systems. Dashboards (SQL warehouse + Dashboards), notebooks, BI tools over JDBC/ODBC, APIs, ML models.

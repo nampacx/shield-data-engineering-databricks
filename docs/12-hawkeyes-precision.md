@@ -1,6 +1,6 @@
 # 12 · Hawkeye's precision
 
-**Notebook:** [12_hawkeyes_precision.py](../notebooks/databricks/12_hawkeyes_precision.py)
+**Notebook:** [12_hawkeyes_precision.ipynb](../notebooks/databricks/12_hawkeyes_precision.ipynb)
 
 ## Concepts
 * **Data skipping**: Delta stores min/max stats per file. If your filter excludes a file's range, the file is never read. Layout decides how well that works.

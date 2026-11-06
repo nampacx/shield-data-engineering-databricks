@@ -1,6 +1,6 @@
 # 08 · Declarative pipelines
 
-**Code:** [pipelines/shield_insight.py](../pipelines/shield_insight.py) · **Notebook:** [08_declarative_pipelines.py](../notebooks/databricks/08_declarative_pipelines.py)
+**Code:** [pipelines/shield_insight.py](../pipelines/shield_insight.py) · **Notebook:** [08_declarative_pipelines.ipynb](../notebooks/databricks/08_declarative_pipelines.ipynb)
 
 ## Concepts
 Lakeflow Spark Declarative Pipelines (formerly Delta Live Tables) let you declare datasets; the engine builds the dependency graph, handles checkpoints, retries, and incremental processing.

@@ -1,6 +1,6 @@
 # 10 · Maria Hill schedules
 
-**Notebook:** [10_maria_hill_schedules.py](../notebooks/databricks/10_maria_hill_schedules.py)
+**Notebook:** [10_maria_hill_schedules.ipynb](../notebooks/databricks/10_maria_hill_schedules.ipynb)
 
 ## Concepts
 * **Lakeflow Jobs**: orchestrate *tasks* (notebooks, pipelines, SQL, Python wheels, dashboards, other jobs) with dependencies, parameters, retries, schedules/triggers, and notifications.

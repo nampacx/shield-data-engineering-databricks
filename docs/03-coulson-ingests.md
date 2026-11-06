@@ -1,6 +1,6 @@
 # 03 · Coulson ingests
 
-**Notebook:** [03_coulson_ingests.py](../notebooks/databricks/03_coulson_ingests.py)
+**Notebook:** [03_coulson_ingests.ipynb](../notebooks/databricks/03_coulson_ingests.ipynb)
 
 ## Concepts
 * **Landing zone**: files exactly as delivered. Never edit them; they are your replay source.

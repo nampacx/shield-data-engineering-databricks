@@ -1,6 +1,6 @@
 # 02 · First recon
 
-**Notebook:** [02_first_recon.py](../notebooks/databricks/02_first_recon.py)
+**Notebook:** [02_first_recon.ipynb](../notebooks/databricks/02_first_recon.ipynb)
 
 ## Concepts
 * **DataFrame**: a distributed table with a schema. **Transformations** (`filter`, `groupBy`, `join`) are lazy; **actions** (`count`, `display`, `write`) trigger work.

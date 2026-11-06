@@ -1,6 +1,6 @@
 # 11 · Governance vs Hydra
 
-**Notebook:** [11_governance_vs_hydra.py](../notebooks/databricks/11_governance_vs_hydra.py)
+**Notebook:** [11_governance_vs_hydra.ipynb](../notebooks/databricks/11_governance_vs_hydra.ipynb)
 
 ## Concepts
 * **Securable hierarchy**: metastore → catalog → schema → table/view/volume/function. Privileges are inherited downward. Access to a table needs `USE CATALOG` + `USE SCHEMA` + `SELECT`.

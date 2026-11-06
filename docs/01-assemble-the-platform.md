@@ -1,6 +1,6 @@
 # 01 · Assemble the platform
 
-**Notebook:** [01_assemble_the_platform.py](../notebooks/databricks/01_assemble_the_platform.py) · **Infra:** [infra/](../infra)
+**Notebook:** [01_assemble_the_platform.ipynb](../notebooks/databricks/01_assemble_the_platform.ipynb) · **Infra:** [infra/](../infra)
 
 ## What you build
 `azd up` (Bicep) creates the Azure resources. A notebook then creates the Unity Catalog objects.

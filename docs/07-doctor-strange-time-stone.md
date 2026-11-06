@@ -1,6 +1,6 @@
 # 07 · Doctor Strange's time stone
 
-**Notebook:** [07_doctor_strange_time_stone.py](../notebooks/databricks/07_doctor_strange_time_stone.py)
+**Notebook:** [07_doctor_strange_time_stone.ipynb](../notebooks/databricks/07_doctor_strange_time_stone.ipynb)
 
 ## Concepts
 * **History**: `DESCRIBE HISTORY` lists each version with user, operation, and metrics: a free audit log of writes.

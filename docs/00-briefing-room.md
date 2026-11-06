@@ -2,7 +2,7 @@
 
 > "I recruit based on potential." — Nick Fury
 
-**Notebook:** [00_briefing_room.py](../notebooks/databricks/00_briefing_room.py) · **Story:** [story.md](../story.md)
+**Notebook:** [00_briefing_room.ipynb](../notebooks/databricks/00_briefing_room.ipynb) · **Story:** [story.md](../story.md)
 
 ## What a data engineer does
 A data engineer builds and runs the systems that move data from where it is created to where decisions are made, and keeps it **correct, fresh, secure, and affordable** on the way. The daily work:

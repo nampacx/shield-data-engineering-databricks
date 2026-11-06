@@ -1,6 +1,6 @@
 # 16 · Project Insight (capstone)
 
-**Notebook:** [16_project_insight.py](../notebooks/databricks/16_project_insight.py) · **Runbook:** [runbook.md](runbook.md)
+**Notebook:** [16_project_insight.ipynb](../notebooks/databricks/16_project_insight.ipynb) · **Runbook:** [runbook.md](runbook.md)
 
 ## Goal
 A platform you can **hand over**: it loads on a schedule, protects its consumers from bad data, tells you when it is unhealthy, and explains how to fix it.

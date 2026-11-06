@@ -9,7 +9,7 @@ resources:
       tasks:
         - task_key: ingest
           notebook_task:
-            notebook_path: ../notebooks/databricks/10_maria_hill_schedules.py
+            notebook_path: ../notebooks/databricks/10_maria_hill_schedules.ipynb
             base_parameters:
               step: ingest
           max_retries: 2
@@ -17,7 +17,7 @@ resources:
           depends_on:
             - task_key: ingest
           notebook_task:
-            notebook_path: ../notebooks/databricks/10_maria_hill_schedules.py
+            notebook_path: ../notebooks/databricks/10_maria_hill_schedules.ipynb
             base_parameters:
               step: silver
           max_retries: 2
@@ -25,7 +25,7 @@ resources:
           depends_on:
             - task_key: silver
           notebook_task:
-            notebook_path: ../notebooks/databricks/10_maria_hill_schedules.py
+            notebook_path: ../notebooks/databricks/10_maria_hill_schedules.ipynb
             base_parameters:
               step: gold
           max_retries: 2
@@ -33,4 +33,4 @@ resources:
           depends_on:
             - task_key: gold
           notebook_task:
-            notebook_path: ../notebooks/databricks/16_project_insight.py
+            notebook_path: ../notebooks/databricks/16_project_insight.ipynb

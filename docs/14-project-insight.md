@@ -1,6 +1,6 @@
-# 16 · Project Insight (capstone)
+# 14 · Project Insight (capstone)
 
-**Notebook:** [16_project_insight.ipynb](../notebooks/databricks/16_project_insight.ipynb) · **Runbook:** [runbook.md](runbook.md)
+**Notebook:** [14_project_insight.ipynb](../notebooks/databricks/14_project_insight.ipynb) · **Runbook:** [runbook.md](runbook.md)
 
 > Status: drafted. Nothing here has run in a real workspace yet; the notebook's **Expected** values are expectations.
 
@@ -16,8 +16,8 @@ A platform you can **hand over**: it loads on a schedule, protects its consumers
 | Orchestration with retries | `shield_daily` job |
 | Governance | notebook 11 |
 | Tests + CI | `tests/`, `ci.yml` |
-| Health checks + alerts | notebook 16 as last task |
-| Cost visibility | `system.billing.usage` query in notebook 16 |
+| Health checks + alerts | notebook 14 as last task |
+| Cost visibility | `system.billing.usage` query in notebook 14 |
 | Runbook | [runbook.md](runbook.md) |
 
 ## What the notebook does
@@ -40,7 +40,7 @@ A fifth step prints DBUs per day and job outcomes from the system tables (`syste
 * Running the job costs DBUs. The schedule is deployed paused. Tear everything down with `azd down --purge` and `databricks bundle destroy` when you finish.
 
 ## Run it
-1. Deploy the bundle (chapter 13) and run `shield_daily`. Chapter 13 itself says its bundle files have not been validated with the CLI, so expect to fix field names.
+1. Deploy the bundle (see the [deploy guide](deploy-and-automate.md)) and run `shield_daily`. The guide says its bundle files have not been validated with the CLI, so expect to fix field names.
 2. Open the `health_check` task of the run and read the summary table.
 3. Break something on purpose (see mini-project 1) and fix it using only the runbook.
 

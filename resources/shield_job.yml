@@ -33,4 +33,4 @@ resources:
           depends_on:
             - task_key: gold
           notebook_task:
-            notebook_path: ../notebooks/databricks/16_project_insight.ipynb
+            notebook_path: ../notebooks/databricks/14_project_insight.ipynb

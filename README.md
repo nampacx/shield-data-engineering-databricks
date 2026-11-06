@@ -18,7 +18,7 @@ Microsoft Fabric is out of scope here; it gets its own repo.
 
 ## What you will learn
 
-Spark and Delta Lake, batch and streaming ingestion, the medallion architecture, data quality, declarative pipelines, orchestration, Unity Catalog governance, performance tuning, infrastructure as code, CI/CD, and serving. See [docs/data-engineering-roadmap.md](docs/data-engineering-roadmap.md) for how each chapter maps to the skills a data engineering role asks for.
+Spark and Delta Lake, batch and streaming ingestion, the medallion architecture, data quality, declarative pipelines, orchestration, Unity Catalog governance, performance tuning, and serving, plus a guide to infrastructure as code and CI/CD. See [docs/data-engineering-roadmap.md](docs/data-engineering-roadmap.md) for how each chapter maps to the skills a data engineering role asks for.
 
 ## The story
 
@@ -54,7 +54,7 @@ flowchart LR
 
 - An Azure subscription where you can create a resource group and an Azure Databricks workspace
 - Azure CLI, Azure Developer CLI (`azd`), Python 3.11+
-- Databricks CLI (needed from chapter 13)
+- Databricks CLI (needed for the [deploy guide](docs/deploy-and-automate.md))
 
 ## Region
 
@@ -85,12 +85,10 @@ This creates: a Databricks workspace (Premium), ADLS Gen2 storage, an access con
 | 10 | Maria Hill schedules | Lakeflow Jobs | [doc](docs/10-maria-hill-schedules.md) | [10_maria_hill_schedules.ipynb](notebooks/databricks/10_maria_hill_schedules.ipynb) | drafted |
 | 11 | Governance vs Hydra | Unity Catalog | [doc](docs/11-governance-vs-hydra.md) | [11_governance_vs_hydra.ipynb](notebooks/databricks/11_governance_vs_hydra.ipynb) | drafted |
 | 12 | Hawkeye's precision | Performance and cost | [doc](docs/12-hawkeyes-precision.md) | [12_hawkeyes_precision.ipynb](notebooks/databricks/12_hawkeyes_precision.ipynb) | drafted |
-| 13 | Infrastructure as code | Declarative Automation Bundles | [doc](docs/13-infrastructure-as-code.md) | n/a (config chapter) | drafted (not validated) |
-| 14 | CI/CD | GitHub Actions | [doc](docs/14-ci-cd.md) | n/a (config chapter) | drafted (tests run locally) |
-| 15 | The Avengers Initiative | Serving, dashboards, MLflow | [doc](docs/15-avengers-initiative.md) | [15_avengers_initiative.ipynb](notebooks/databricks/15_avengers_initiative.ipynb) | drafted |
-| 16 | Project Insight | Capstone, runbook | [doc](docs/16-project-insight.md) | [16_project_insight.ipynb](notebooks/databricks/16_project_insight.ipynb) | drafted |
+| 13 | The Avengers Initiative | Serving, dashboards, MLflow | [doc](docs/13-avengers-initiative.md) | [13_avengers_initiative.ipynb](notebooks/databricks/13_avengers_initiative.ipynb) | drafted |
+| 14 | Project Insight | Capstone, runbook | [doc](docs/14-project-insight.md) | [14_project_insight.ipynb](notebooks/databricks/14_project_insight.ipynb) | drafted |
 
-Status values: `planned`, `drafted` (written and checked against Microsoft Learn, **not yet run** in a real workspace), `verified` (run end to end). Nothing is `verified` yet. Extra guides: [glossary](docs/glossary.md), [troubleshooting](docs/troubleshooting.md), [runbook](docs/runbook.md).
+Status values: `planned`, `drafted` (written and checked against Microsoft Learn, **not yet run** in a real workspace), `verified` (run end to end). Nothing is `verified` yet. Extra guides: [deploy and automate](docs/deploy-and-automate.md) (bundles and CI/CD, drafted, not validated), [glossary](docs/glossary.md), [troubleshooting](docs/troubleshooting.md), [runbook](docs/runbook.md).
 
 ## Dataset
 

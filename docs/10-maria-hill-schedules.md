@@ -14,9 +14,9 @@ One notebook, three job tasks. The widget `step` (`ingest`, `silver`, `gold`, or
 
 ## Job shape
 ```
-ingest → silver → gold → (chapter 16) health_check
+ingest → silver → gold → (chapter 14) health_check
 ```
-The same job is defined as code in `resources/shield_job.yml` (chapter 13). It differs from the UI steps in two ways: it sets `max_retries: 2` on the first three tasks only (not on `health_check`) and it has no notifications.
+The same job is defined as code in `resources/shield_job.yml` (see the [deploy guide](deploy-and-automate.md)). It differs from the UI steps in two ways: it sets `max_retries: 2` on the first three tasks only (not on `health_check`) and it has no notifications.
 
 ## Gotchas
 * Time zones: set `timezone_id` explicitly.

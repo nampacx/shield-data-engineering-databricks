@@ -1,6 +1,6 @@
 # Runbook: shield_daily failed
 
-*For chapter 16. Written for 3 a.m. Keep it short and keep it current.*
+*For chapter 14. Written for 3 a.m. Keep it short and keep it current.*
 
 ## 1. Which task failed?
 Jobs & Pipelines → `shield_daily` → latest run. Note the failed task key.

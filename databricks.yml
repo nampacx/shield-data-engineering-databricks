@@ -1,4 +1,4 @@
-# Declarative Automation Bundle (formerly Databricks Asset Bundles). Chapter 13.
+# Declarative Automation Bundle (formerly Databricks Asset Bundles). Guide: docs/deploy-and-automate.md.
 # Workspace host comes from the CLI profile or the DATABRICKS_HOST environment variable.
 bundle:
   name: shield_insight

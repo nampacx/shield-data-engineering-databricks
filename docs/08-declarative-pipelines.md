@@ -32,7 +32,7 @@ Same bronze → silver → gold idea, but you wrote **no** checkpoint paths, no 
 * Rejected rows are dropped and only counted in the event log. There is no quarantine table.
 * `dropDuplicates` keeps the first copy of an incident; chapters 05 and 06 keep the latest. The copies are identical in this dataset, so the result is the same.
 * The gold view groups by date, type and severity only. It has no `city`, because the pipeline does not read the locations feed, so it is not the same table as `shield.gold.daily_threat_briefing`.
-* The bundle in chapter 13 deploys this file as `shield_insight_<target>` into schema `pipeline_<target>`, not `pipeline`.
+* The bundle in the [deploy guide](deploy-and-automate.md) deploys this file as `shield_insight_<target>` into schema `pipeline_<target>`, not `pipeline`.
 
 ## Gotchas
 * Pipeline code is evaluated to *build a graph*; avoid side effects (no writes, no `display`) in dataset functions.
@@ -49,4 +49,4 @@ Same bronze → silver → gold idea, but you wrote **no** checkpoint paths, no 
 2. **Add a quarantine table.** The pipeline throws bad rows away. Add a second streaming table holding the rows that fail at least one rule (the inverse of the rules), as in the quarantine pattern in Microsoft's expectation docs. Does its row count match the event log? Bonus: rewrite `daily_threat_briefing` as `CREATE MATERIALIZED VIEW` in a second, SQL file.
 3. **Replay a file, then full refresh.** Copy `part-0000.json` into the raw `incident_reports` folder under a new name, run the update, and watch bronze grow while silver stays at 9,500. Then run once with **Full refresh** and compare what each run does to the materialized view. Delete the copy afterwards, and don't run chapter 03's `ingest()` while it is there, or `shield.bronze.incident_reports` picks it up too.
 
-Bonus: compare the cost (DBUs) of a pipeline update with the notebook version, using the billing system tables from chapter 16.
+Bonus: compare the cost (DBUs) of a pipeline update with the notebook version, using the billing system tables from chapter 14.

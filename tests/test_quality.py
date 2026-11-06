@@ -32,6 +32,7 @@ def test_python_mirror_matches_spark():
         "agent_id string, reported_at string, severity string, casualties int",
     ).withColumn("reported_ts", F.expr("try_to_timestamp(reported_at, \"yyyy-MM-dd'T'HH:mm:ss'Z'\")"))
     for name, expr in INCIDENT_RULES.items():
-        spark_fail = df.filter(~F.expr(expr)).count()
+        # coalesce: a NULL condition counts as a failure, as in the notebooks and the pipeline
+        spark_fail = df.filter(~F.coalesce(F.expr(expr), F.lit(False))).count()
         py_fail = sum(name in failed_rules(r) for r in rows)
         assert spark_fail == py_fail, name

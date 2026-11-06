@@ -26,6 +26,13 @@ Read this before you create or change a notebook. If your tool supports skills, 
 5. `## 🧹 Clean up`: drop what the chapter created, unless the next chapter needs it. Say so when there is nothing to delete.
 6. `## 🎯 Recap`, ending with `> 💡 Next: …`. The "Try it yourself" mini-projects stay in the doc.
 
+**Explain new concepts where they appear**
+- The first time a notebook uses a concept the reader has not met (medallion layers, Auto Loader, a CHECK constraint, time travel), explain it in the notebook before the first step that needs it. Don't rely on the doc alone.
+- Use this shape, kept short: **the idea** (one or two sentences, say when it is a pattern and not a feature), a **picture** (plain text or a table, as GitHub doesn't reliably render mermaid in notebooks), **how this notebook implements it** (the exact schemas, tables and steps), **why it helps**, and **what is not covered yet** with the chapter that does.
+- A concept introduced in an earlier chapter gets one sentence and a link to that chapter, not a second full explanation.
+- List the concepts in the opening table with the step where each one appears. The doc stays the deep dive; the notebook has what the reader needs to follow the steps.
+- Reference example: "The medallion architecture" in `05_medallion.ipynb`.
+
 **One experiment per cell**
 - Each experiment gets a markdown cell with `### Step N · Title`, then **Goal:** (what it proves), the input (table, file, query) and **Expected:** (the concrete outcome), then one short code cell.
 - Order experiments so each changes one thing. Let the first cell of a sequence create the state it needs. Re-running a cell must not change its result; when it would, say so in the markdown.
